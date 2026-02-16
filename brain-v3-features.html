@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI NEURAL CORE v3 - Full Features</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: #030308;
+      min-height: 100vh;
+      color: white;
+      overflow-x: hidden;
+    }
+    
+    /* Grid overlay */
+    .grid-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .container {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Header */
+    .header {
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .logo {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,0.5);
+    }
+    
+    .ai-tabs {
+      display: flex;
+      gap: 4px;
+    }
+    
+    .ai-tab {
+      padding: 10px 25px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.4);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .ai-tab:hover {
+      border-color: rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.7);
+    }
+    
+    .ai-tab.active {
+      background: rgba(0,255,136,0.1);
+      border-color: #00ff88;
+      color: #00ff88;
+    }
+    
+    .ai-tab.barvis.active {
+      background: rgba(255,0,110,0.1);
+      border-color: #ff006e;
+      color: #ff006e;
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .train-btn {
+      padding: 10px 20px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #00ff88, #00cc6a);
+      border: none;
+      color: black;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .train-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(0,255,136,0.3);
+    }
+    
+    /* Main Layout */
+    .main-layout {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 300px 1fr 320px;
+      gap: 0;
+    }
+    
+    /* Left Panel - Skills */
+    .skills-panel {
+      background: rgba(255,255,255,0.02);
+      border-right: 1px solid rgba(255,255,255,0.05);
+      padding: 25px;
+      overflow-y: auto;
+    }
+    
+    .panel-title {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 20px;
+    }
+    
+    /* Independence Meter */
+    .independence-section {
+      background: linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,255,136,0.02));
+      border: 1px solid rgba(0,255,136,0.2);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+    
+    .independence-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .independence-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: #00ff88;
+    }
+    
+    .independence-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 24px;
+      font-weight: 600;
+      color: white;
+    }
+    
+    .independence-bar {
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    
+    .independence-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00ff88, #00cc6a);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+      position: relative;
+    }
+    
+    .independence-goal {
+      position: absolute;
+      right: 0;
+      top: -15px;
+      width: 2px;
+      height: 20px;
+      background: white;
+    }
+    
+    .independence-note {
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+    }
+    
+    .independence-note span {
+      color: #00ff88;
+    }
+    
+    /* Skill Tree */
+    .skill-tree {
+      margin-bottom: 25px;
+    }
+    
+    .skill-item {
+      margin-bottom: 15px;
+    }
+    
+    .skill-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    
+    .skill-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.8);
+    }
+    
+    .skill-rank {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #00ff88;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .skill-rank-badge {
+      padding: 2px 6px;
+      background: rgba(0,255,136,0.2);
+      border-radius: 3px;
+      font-size: 9px;
+      font-weight: 600;
+    }
+    
+    .skill-bar {
+      height: 6px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00ff88, rgba(0,255,136,0.5));
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+    
+    .skill-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
+      font-size: 9px;
+      color: rgba(255,255,255,0.3);
+    }
+    
+    /* Strongest / Needs Work */
+    .assessment-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .assessment-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 8px;
+      padding: 12px;
+    }
+    
+    .assessment-card.strongest {
+      border-color: rgba(0,255,136,0.2);
+    }
+    
+    .assessment-card.needs-work {
+      border-color: rgba(255,170,0,0.2);
+    }
+    
+    .assessment-label {
+      font-size: 9px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    
+    .assessment-card.strongest .assessment-label {
+      color: #00ff88;
+    }
+    
+    .assessment-card.needs-work .assessment-label {
+      color: #ffaa00;
+    }
+    
+    .assessment-value {
+      font-size: 13px;
+      font-weight: 600;
+    }
+    
+    /* Center - Brain */
+    .brain-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: radial-gradient(ellipse at center, rgba(0,255,136,0.05) 0%, transparent 70%);
+    }
+    
+    .brain-container {
+      position: relative;
+      width: 450px;
+      height: 450px;
+    }
+    
+    /* CSS Brain Animation */
+    .brain-core {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 250px;
+      height: 300px;
+      background: radial-gradient(ellipse at center, rgba(0,255,136,0.4) 0%, rgba(0,255,136,0.1) 50%, transparent 70%);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      box-shadow: 
+        0 0 80px rgba(0,255,136,0.4),
+        0 0 150px rgba(0,255,136,0.2),
+        inset 0 0 80px rgba(0,255,136,0.3);
+      animation: pulseBrain 3s ease-in-out infinite, rotateBrain 20s linear infinite;
+    }
+    
+    @keyframes pulseBrain {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.03); }
+    }
+    
+    @keyframes rotateBrain {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(10deg); }
+    }
+    
+    /* Particles */
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+    }
+    
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #00ff88;
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: floatParticle 8s infinite ease-in-out;
+    }
+    
+    @keyframes floatParticle {
+      0%, 100% { transform: translateY(0) translateX(0); opacity: 0.6; }
+      25% { transform: translateY(-50px) translateX(20px); opacity: 1; }
+      50% { transform: translateY(-20px) translateX(-30px); opacity: 0.4; }
+      75% { transform: translateY(-70px) translateX(10px); opacity: 0.8; }
+    }
+    
+    /* Processing indicator */
+    .processing-indicator {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(0,255,136,0.3);
+      border-radius: 20px;
+    }
+    
+    .processing-dot {
+      width: 8px;
+      height: 8px;
+      background: #00ff88;
+      border-radius: 50%;
+      animation: processingPulse 1s infinite;
+    }
+    
+    @keyframes processingPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    
+    .processing-text {
+      font-size: 11px;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 1px;
+    }
+    
+    /* Brain Info */
+    .brain-info {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 5;
+    }
+    
+    .brain-name {
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      color: white;
+      text-shadow: 0 0 40px rgba(0,255,136,0.5);
+    }
+    
+    .brain-status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: #00ff88;
+      margin-top: 10px;
+    }
+    
+    /* Right Panel - Activity */
+    .activity-panel {
+      background: rgba(255,255,255,0.02);
+      border-left: 1px solid rgba(255,255,255,0.05);
+      padding: 25px;
+      overflow-y: auto;
+    }
+    
+    /* Most Used This Week */
+    .most-used-section {
+      margin-bottom: 25px;
+    }
+    
+    .most-used-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    
+    .most-used-rank {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.3);
+      width: 20px;
+    }
+    
+    .most-used-icon {
+      width: 36px;
+      height: 36px;
+      background: rgba(0,255,136,0.1);
+      border: 1px solid rgba(0,255,136,0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    
+    .most-used-info {
+      flex: 1;
+    }
+    
+    .most-used-name {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    
+    .most-used-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+    }
+    
+    .most-used-count span {
+      color: #00ff88;
+    }
+    
+    /* Knowledge Growth */
+    .growth-section {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+    
+    .growth-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .growth-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 28px;
+      font-weight: 600;
+      color: #00ff88;
+    }
+    
+    .growth-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 60px;
+    }
+    
+    .growth-bar {
+      flex: 1;
+      background: linear-gradient(0deg, #00ff88, rgba(0,255,136,0.3));
+      border-radius: 2px;
+      transition: height 0.3s ease;
+    }
+    
+    .growth-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 9px;
+      color: rgba(255,255,255,0.3);
+    }
+    
+    /* Sound Toggle */
+    .sound-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    
+    .sound-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+    }
+    
+    .sound-switch {
+      width: 44px;
+      height: 24px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .sound-switch.active {
+      background: rgba(0,255,136,0.3);
+    }
+    
+    .sound-switch::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+    
+    .sound-switch.active::after {
+      transform: translateX(20px);
+      background: #00ff88;
+    }
+    
+    /* Train Modal */
+    .train-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .train-modal.active {
+      display: flex;
+    }
+    
+    .train-modal-content {
+      background: #0a0a10;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 30px;
+      width: 500px;
+      max-width: 90%;
+    }
+    
+    .train-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .train-modal-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    .train-modal-close {
+      width: 30px;
+      height: 30px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    
+    .train-input {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 15px;
+      color: white;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      resize: none;
+      height: 150px;
+      margin-bottom: 15px;
+    }
+    
+    .train-input::placeholder {
+      color: rgba(255,255,255,0.3);
+    }
+    
+    .train-submit {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #00ff88, #00cc6a);
+      border: none;
+      border-radius: 8px;
+      color: black;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-overlay"></div>
+  
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">NEURAL CORE v3.0</div>
+      <div class="ai-tabs">
+        <button class="ai-tab active" onclick="switchAI('jarvis')">JARVIS</button>
+        <button class="ai-tab barvis" onclick="switchAI('barvis')">BARVIS</button>
+      </div>
+      <div class="header-actions">
+        <button class="train-btn" onclick="openTrainModal()">
+          <span>⚡</span> TRAIN ON THIS
+        </button>
+      </div>
+    </header>
+    
+    <!-- Main Layout -->
+    <main class="main-layout">
+      <!-- Left Panel - Skills -->
+      <aside class="skills-panel">
+        <!-- Independence Meter -->
+        <div class="independence-section">
+          <div class="independence-header">
+            <span class="independence-label">INDEPENDENCE</span>
+            <span class="independence-value">18%</span>
+          </div>
+          <div class="independence-bar">
+            <div class="independence-fill" style="width: 90%;">
+              <!-- 18% of 20% goal = 90% of bar -->
+            </div>
+          </div>
+          <div class="independence-note">
+            Tasks completed without instruction. Goal: <span>20%</span>
+          </div>
+        </div>
+        
+        <div class="panel-title">SKILL TREE</div>
+        
+        <!-- Skill Items -->
+        <div class="skill-tree">
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">Script Writing</span>
+              <span class="skill-rank">
+                <span class="skill-rank-badge">MASTER</span>
+                92%
+              </span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" style="width: 92%;"></div>
+            </div>
+            <div class="skill-meta">
+              <span>347 scripts</span>
+              <span>+2.1% this week</span>
+            </div>
+          </div>
+          
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">Research & Analysis</span>
+              <span class="skill-rank">
+                <span class="skill-rank-badge">EXPERT</span>
+                88%
+              </span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" style="width: 88%;"></div>
+            </div>
+            <div class="skill-meta">
+              <span>1,204 topics</span>
+              <span>+3.4% this week</span>
+            </div>
+          </div>
+          
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">Backend / APIs</span>
+              <span class="skill-rank">
+                <span class="skill-rank-badge">EXPERT</span>
+                90%
+              </span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" style="width: 90%;"></div>
+            </div>
+            <div class="skill-meta">
+              <span>892 commits</span>
+              <span>+1.8% this week</span>
+            </div>
+          </div>
+          
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">Frontend / UI</span>
+              <span class="skill-rank">
+                <span class="skill-rank-badge">ADVANCED</span>
+                85%
+              </span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" style="width: 85%;"></div>
+            </div>
+            <div class="skill-meta">
+              <span>156 components</span>
+              <span>+4.2% this week</span>
+            </div>
+          </div>
+          
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">Automation</span>
+              <span class="skill-rank">
+                <span class="skill-rank-badge">MASTER</span>
+                95%
+              </span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" style="width: 95%;"></div>
+            </div>
+            <div class="skill-meta">
+              <span>89 workflows</span>
+              <span>+0.8% this week</span>
+            </div>
+          </div>
+          
+          <div class="skill-item">
+            <div class="skill-header">
+              <span class="skill-name">Thumbnails</span>
+              <span class="skill-rank">
+                <span class="skill-rank-badge">INTERMEDIATE</span>
+                72%
+              </span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" style="width: 72%;"></div>
+            </div>
+            <div class="skill-meta">
+              <span>234 designs</span>
+              <span>+5.1% this week</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Strongest / Needs Work -->
+        <div class="assessment-section">
+          <div class="assessment-card strongest">
+            <div class="assessment-label">STRONGEST</div>
+            <div class="assessment-value">Automation</div>
+          </div>
+          <div class="assessment-card needs-work">
+            <div class="assessment-label">NEEDS WORK</div>
+            <div class="assessment-value">Thumbnails</div>
+          </div>
+        </div>
+      </aside>
+      
+      <!-- Center - Brain -->
+      <section class="brain-section">
+        <div class="brain-container">
+          <div class="particles">
+            <div class="particle" style="top: 20%; left: 30%; animation-delay: 0s;"></div>
+            <div class="particle" style="top: 40%; left: 70%; animation-delay: 1s;"></div>
+            <div class="particle" style="top: 60%; left: 25%; animation-delay: 2s;"></div>
+            <div class="particle" style="top: 30%; left: 60%; animation-delay: 3s;"></div>
+            <div class="particle" style="top: 70%; left: 45%; animation-delay: 4s;"></div>
+            <div class="particle" style="top: 50%; left: 80%; animation-delay: 5s;"></div>
+            <div class="particle" style="top: 25%; left: 40%; animation-delay: 6s;"></div>
+            <div class="particle" style="top: 65%; left: 65%; animation-delay: 7s;"></div>
+          </div>
+          
+          <div class="brain-core" id="brainCore"></div>
+          
+          <div class="brain-info">
+            <div class="brain-name" id="brainName">JARVIS</div>
+            <div class="brain-status" id="brainStatus">● NEURAL LINK ACTIVE</div>
+          </div>
+        </div>
+        
+        <div class="processing-indicator">
+          <div class="processing-dot"></div>
+          <span class="processing-text">PROCESSING TASKS...</span>
+        </div>
+      </section>
+      
+      <!-- Right Panel - Activity -->
+      <aside class="activity-panel">
+        <div class="panel-title">MOST USED THIS WEEK</div>
+        
+        <div class="most-used-section">
+          <div class="most-used-item">
+            <span class="most-used-rank">1</span>
+            <div class="most-used-icon">📝</div>
+            <div class="most-used-info">
+              <div class="most-used-name">Script Writing</div>
+              <div class="most-used-count"><span>47</span> sessions</div>
+            </div>
+          </div>
+          
+          <div class="most-used-item">
+            <span class="most-used-rank">2</span>
+            <div class="most-used-icon">🔍</div>
+            <div class="most-used-info">
+              <div class="most-used-name">Research</div>
+              <div class="most-used-count"><span>38</span> sessions</div>
+            </div>
+          </div>
+          
+          <div class="most-used-item">
+            <span class="most-used-rank">3</span>
+            <div class="most-used-icon">💻</div>
+            <div class="most-used-info">
+              <div class="most-used-name">Code / APIs</div>
+              <div class="most-used-count"><span>31</span> sessions</div>
+            </div>
+          </div>
+          
+          <div class="most-used-item">
+            <span class="most-used-rank">4</span>
+            <div class="most-used-icon">🎨</div>
+            <div class="most-used-info">
+              <div class="most-used-name">UI Design</div>
+              <div class="most-used-count"><span>24</span> sessions</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Knowledge Growth -->
+        <div class="panel-title">KNOWLEDGE GROWTH</div>
+        <div class="growth-section">
+          <div class="growth-header">
+            <span class="panel-title" style="margin: 0;">THIS WEEK</span>
+            <span class="growth-value">+12.4%</span>
+          </div>
+          <div class="growth-chart">
+            <div class="growth-bar" style="height: 30%;"></div>
+            <div class="growth-bar" style="height: 45%;"></div>
+            <div class="growth-bar" style="height: 40%;"></div>
+            <div class="growth-bar" style="height: 55%;"></div>
+            <div class="growth-bar" style="height: 70%;"></div>
+            <div class="growth-bar" style="height: 65%;"></div>
+            <div class="growth-bar" style="height: 85%;"></div>
+          </div>
+          <div class="growth-labels">
+            <span>Mon</span>
+            <span>Tue</span>
+            <span>Wed</span>
+            <span>Thu</span>
+            <span>Fri</span>
+            <span>Sat</span>
+            <span>Sun</span>
+          </div>
+        </div>
+        
+        <!-- Sound Toggle -->
+        <div class="sound-toggle">
+          <span class="sound-label">🔊 Neural Hum</span>
+          <div class="sound-switch active" onclick="toggleSound(this)"></div>
+        </div>
+      </aside>
+    </main>
+  </div>
+  
+  <!-- Train Modal -->
+  <div class="train-modal" id="trainModal">
+    <div class="train-modal-content">
+      <div class="train-modal-header">
+        <span class="train-modal-title">⚡ Train on New Knowledge</span>
+        <button class="train-modal-close" onclick="closeTrainModal()">×</button>
+      </div>
+      <textarea class="train-input" placeholder="Paste knowledge, data, or instructions here..."></textarea>
+      <button class="train-submit" onclick="submitTraining()">PROCESS & STORE</button>
+    </div>
+  </div>
+  
+  <script>
+    // Audio context for neural hum
+    let audioCtx = null;
+    let oscillator = null;
+    let gainNode = null;
+    let soundEnabled = true;
+    
+    function initAudio() {
+      if (audioCtx) return;
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      oscillator = audioCtx.createOscillator();
+      gainNode = audioCtx.createGain();
+      
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(60, audioCtx.currentTime);
+      gainNode.gain.setValueAtTime(0.02, audioCtx.currentTime);
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      oscillator.start();
+    }
+    
+    function toggleSound(el) {
+      el.classList.toggle('active');
+      soundEnabled = el.classList.contains('active');
+      
+      if (soundEnabled) {
+        initAudio();
+        if (gainNode) gainNode.gain.setValueAtTime(0.02, audioCtx.currentTime);
+      } else {
+        if (gainNode) gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+      }
+    }
+    
+    function switchAI(ai) {
+      const tabs = document.querySelectorAll('.ai-tab');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      
+      if (ai === 'jarvis') {
+        tabs[0].classList.add('active');
+        document.getElementById('brainName').textContent = 'JARVIS';
+        document.getElementById('brainStatus').textContent = '● NEURAL LINK ACTIVE';
+        document.documentElement.style.setProperty('--accent', '#00ff88');
+      } else {
+        tabs[1].classList.add('active');
+        document.getElementById('brainName').textContent = 'BARVIS';
+        document.getElementById('brainStatus').textContent = '● NEURAL LINK ACTIVE';
+        document.documentElement.style.setProperty('--accent', '#ff006e');
+      }
+    }
+    
+    function openTrainModal() {
+      document.getElementById('trainModal').classList.add('active');
+    }
+    
+    function closeTrainModal() {
+      document.getElementById('trainModal').classList.remove('active');
+    }
+    
+    function submitTraining() {
+      // Simulate training
+      alert('Knowledge processing initiated! (Demo only)');
+      closeTrainModal();
+    }
+    
+    // Initialize audio on first interaction
+    document.addEventListener('click', () => {
+      if (soundEnabled && !audioCtx) {
+        initAudio();
+      }
+    }, { once: true });
+  </script>
+</body>
+</html>
