@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MEME HEADQUARTERS 🗿</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      min-height: 100vh;
+      color: white;
+      overflow-x: hidden;
+    }
+    
+    /* Floating memes background */
+    .meme-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    
+    .floating-meme {
+      position: absolute;
+      font-size: 60px;
+      opacity: 0.1;
+      animation: float 20s infinite linear;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); }
+      100% { transform: translateY(-100vh) rotate(360deg); }
+    }
+    
+    .floating-meme:nth-child(1) { left: 5%; animation-delay: 0s; font-size: 80px; }
+    .floating-meme:nth-child(2) { left: 15%; animation-delay: 3s; }
+    .floating-meme:nth-child(3) { left: 25%; animation-delay: 6s; font-size: 50px; }
+    .floating-meme:nth-child(4) { left: 35%; animation-delay: 9s; }
+    .floating-meme:nth-child(5) { left: 45%; animation-delay: 12s; font-size: 70px; }
+    .floating-meme:nth-child(6) { left: 55%; animation-delay: 15s; }
+    .floating-meme:nth-child(7) { left: 65%; animation-delay: 18s; font-size: 55px; }
+    .floating-meme:nth-child(8) { left: 75%; animation-delay: 2s; }
+    .floating-meme:nth-child(9) { left: 85%; animation-delay: 5s; font-size: 65px; }
+    .floating-meme:nth-child(10) { left: 95%; animation-delay: 8s; }
+    
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Header */
+    .header {
+      background: linear-gradient(90deg, #ff006e, #8338ec, #3a86ff, #06ffa5);
+      background-size: 300% 100%;
+      animation: rainbow 5s ease infinite;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-shadow: 2px 2px 0 black;
+    }
+    
+    .logo-meme {
+      font-size: 36px;
+      animation: spin 3s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .header-stats {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .header-stat {
+      background: rgba(0,0,0,0.3);
+      padding: 8px 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .header-stat-value {
+      font-size: 20px;
+      font-weight: 800;
+    }
+    
+    .header-stat-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+    
+    /* Stonks Banner */
+    .stonks-banner {
+      background: linear-gradient(90deg, #00ff00, #00cc00);
+      padding: 10px;
+      text-align: center;
+      font-weight: 800;
+      color: black;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+    
+    .stonks-man {
+      font-size: 40px;
+    }
+    
+    /* Main Layout */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr 300px;
+      min-height: calc(100vh - 120px);
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      background: rgba(20, 20, 30, 0.95);
+      padding: 20px;
+      border-right: 3px solid #ff006e;
+    }
+    
+    .sidebar-title {
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .crew-card {
+      background: rgba(255,255,255,0.05);
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .crew-card:hover {
+      border-color: #ff006e;
+      transform: translateX(5px);
+    }
+    
+    .crew-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    
+    .crew-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 800;
+    }
+    
+    .crew-info h3 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+    
+    .crew-status {
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+    
+    .status-locked { background: #00ff00; color: black; }
+    .status-demon { background: #ff006e; color: white; }
+    .status-grind { background: #8338ec; color: white; }
+    .status-touch-grass { background: #666; color: white; }
+    
+    .crew-quote {
+      font-size: 11px;
+      font-style: italic;
+      color: rgba(255,255,255,0.5);
+      margin-top: 8px;
+      border-left: 2px solid #ff006e;
+      padding-left: 8px;
+    }
+    
+    /* Main Content */
+    .main-content {
+      padding: 25px;
+      background: rgba(15, 15, 20, 0.95);
+    }
+    
+    .welcome-banner {
+      background: linear-gradient(135deg, rgba(255,0,110,0.2), rgba(131,56,236,0.2));
+      border: 2px solid #ff006e;
+      border-radius: 16px;
+      padding: 25px;
+      margin-bottom: 25px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .welcome-meme {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 100px;
+      opacity: 0.3;
+    }
+    
+    .welcome-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    
+    .welcome-subtitle {
+      font-size: 16px;
+      color: rgba(255,255,255,0.7);
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .stat-card {
+      background: rgba(255,255,255,0.05);
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      border-color: #8338ec;
+      transform: translateY(-5px);
+    }
+    
+    .stat-icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(90deg, #ff006e, #8338ec);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .stat-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 5px;
+      text-transform: uppercase;
+    }
+    
+    .stat-meme {
+      font-size: 10px;
+      color: #ff006e;
+      margin-top: 8px;
+      font-style: italic;
+    }
+    
+    /* Tasks */
+    .tasks-section {
+      background: rgba(255,255,255,0.03);
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    
+    .tasks-header {
+      background: linear-gradient(90deg, #ff006e, #8338ec);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .tasks-title {
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .tasks-subtitle {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+    
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    
+    .task-item:hover {
+      background: rgba(255,255,255,0.03);
+    }
+    
+    .task-priority {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    
+    .priority-fire { background: linear-gradient(135deg, #ff006e, #ff4d4d); }
+    .priority-mid { background: linear-gradient(135deg, #ffd600, #ff9100); }
+    .priority-chill { background: linear-gradient(135deg, #00ff00, #00cc00); }
+    
+    .task-content { flex: 1; }
+    
+    .task-title-text {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    
+    .task-meta {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+    }
+    
+    .task-meme {
+      font-size: 11px;
+      color: #8338ec;
+      margin-top: 4px;
+    }
+    
+    .task-progress {
+      text-align: right;
+    }
+    
+    .task-progress-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: #00ff00;
+    }
+    
+    .task-progress-label {
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+    }
+    
+    /* Activity Panel */
+    .activity-panel {
+      background: rgba(20, 20, 30, 0.95);
+      padding: 20px;
+      border-left: 3px solid #8338ec;
+    }
+    
+    .activity-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .activity-item {
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-left: 3px solid #ff006e;
+    }
+    
+    .activity-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    
+    .activity-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    
+    .activity-name {
+      font-size: 13px;
+      font-weight: 600;
+    }
+    
+    .activity-time {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      margin-left: auto;
+    }
+    
+    .activity-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.8);
+    }
+    
+    .activity-reaction {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #00ff00;
+      font-weight: 600;
+    }
+    
+    /* Quick Actions */
+    .quick-actions {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .action-btn {
+      padding: 15px;
+      border-radius: 10px;
+      border: none;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .action-btn.primary {
+      background: linear-gradient(90deg, #ff006e, #8338ec);
+      color: white;
+    }
+    
+    .action-btn.secondary {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+    
+    .action-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 5px 20px rgba(255,0,110,0.3);
+    }
+    
+    /* Footer */
+    .footer {
+      background: rgba(0,0,0,0.5);
+      padding: 10px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+    }
+    
+    .footer-meme {
+      font-size: 14px;
+    }
+    
+    /* Marquee */
+    .marquee {
+      background: #111;
+      padding: 8px 0;
+      overflow: hidden;
+    }
+    
+    .marquee-content {
+      display: flex;
+      gap: 50px;
+      animation: marquee 30s linear infinite;
+      white-space: nowrap;
+    }
+    
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    
+    .marquee-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+    
+    .marquee-item.positive { color: #00ff00; }
+    .marquee-item.negative { color: #ff4d4d; }
+  </style>
+</head>
+<body>
+  <!-- Floating Memes Background -->
+  <div class="meme-bg">
+    <div class="floating-meme">🗿</div>
+    <div class="floating-meme">💀</div>
+    <div class="floating-meme">🅱️</div>
+    <div class="floating-meme">😤</div>
+    <div class="floating-meme">🔥</div>
+    <div class="floating-meme">💎</div>
+    <div class="floating-meme">🚀</div>
+    <div class="floating-meme">🤡</div>
+    <div class="floating-meme">⚡</div>
+    <div class="floating-meme">🗿</div>
+  </div>
+  
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <span class="logo-meme">🗿</span>
+        MEME HEADQUARTERS
+      </div>
+      <div class="header-stats">
+        <div class="header-stat">
+          <div class="header-stat-value">$847K</div>
+          <div class="header-stat-label">Money Printer</div>
+        </div>
+        <div class="header-stat">
+          <div class="header-stat-value">127K</div>
+          <div class="header-stat-label">Viewers (no cap)</div>
+        </div>
+        <div class="header-stat">
+          <div class="header-stat-value">∞</div>
+          <div class="header-stat-label">Grind Mode</div>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Stonks Banner -->
+    <div class="stonks-banner">
+      <span class="stonks-man">📈</span>
+      STONKS ONLY GO UP • WE LITERALLY CANNOT LOSE • BUILT DIFFERENT • SKILL ISSUE IF YOU'RE NOT USING THIS
+      <span class="stonks-man">📈</span>
+    </div>
+    
+    <!-- Marquee -->
+    <div class="marquee">
+      <div class="marquee-content">
+        <span class="marquee-item positive">📈 History Channel +12.3%</span>
+        <span class="marquee-item positive">💰 Revenue: Money printer go BRRR</span>
+        <span class="marquee-item negative">📉 Watch time -2.1% (skill issue)</span>
+        <span class="marquee-item positive">🔥 Roof Report: 50K views (we're so back)</span>
+        <span class="marquee-item positive">✅ Script completed (absolute W)</span>
+        <span class="marquee-item">🗿 Jarvis: cooking</span>
+        <span class="marquee-item">😤 Barvis: locked in</span>
+        <span class="marquee-item positive">📈 History Channel +12.3%</span>
+        <span class="marquee-item positive">💰 Revenue: Money printer go BRRR</span>
+        <span class="marquee-item negative">📉 Watch time -2.1% (skill issue)</span>
+        <span class="marquee-item positive">🔥 Roof Report: 50K views (we're so back)</span>
+      </div>
+    </div>
+    
+    <!-- Main Layout -->
+    <main class="main-layout">
+      <!-- Sidebar - Crew -->
+      <aside class="sidebar">
+        <div class="sidebar-title">👥 THE SQUAD</div>
+        
+        <div class="crew-card">
+          <div class="crew-header">
+            <div class="crew-avatar" style="background: linear-gradient(135deg, #ffd700, #ff8c00);">👑</div>
+            <div class="crew-info">
+              <h3>CARLOS</h3>
+              <span class="crew-status status-grind">ON THE GRIND</span>
+            </div>
+          </div>
+          <div class="crew-quote">"just ship it lmao"</div>
+        </div>
+        
+        <div class="crew-card">
+          <div class="crew-header">
+            <div class="crew-avatar" style="background: linear-gradient(135deg, #8338ec, #3a86ff);">🎮</div>
+            <div class="crew-info">
+              <h3>JUG</h3>
+              <span class="crew-status status-locked">LOCKED IN 🔒</span>
+            </div>
+          </div>
+          <div class="crew-quote">"make it funny but operational"</div>
+        </div>
+        
+        <div class="crew-card">
+          <div class="crew-header">
+            <div class="crew-avatar" style="background: linear-gradient(135deg, #00ff00, #00cc00);">🤖</div>
+            <div class="crew-info">
+              <h3>JARVIS</h3>
+              <span class="crew-status status-demon">ON DEMON TIME 😈</span>
+            </div>
+          </div>
+          <div class="crew-quote">"doing nerd shit again"</div>
+        </div>
+        
+        <div class="crew-card">
+          <div class="crew-header">
+            <div class="crew-avatar" style="background: linear-gradient(135deg, #ff006e, #ff4d4d);">🔥</div>
+            <div class="crew-info">
+              <h3>BARVIS</h3>
+              <span class="crew-status status-demon">COOKING 👨‍🍳</span>
+            </div>
+          </div>
+          <div class="crew-quote">"say less, building rn"</div>
+        </div>
+        
+        <div class="sidebar-title" style="margin-top: 20px;">⚙️ SETTINGS</div>
+        <div class="crew-card" style="text-align: center; cursor: pointer;">
+          <span style="font-size: 24px;">🌱</span>
+          <div style="font-size: 12px; margin-top: 8px; color: rgba(255,255,255,0.5);">Touch Grass Mode</div>
+          <div style="font-size: 10px; color: #ff006e; margin-top: 4px;">(Currently: OFF)</div>
+        </div>
+      </aside>
+      
+      <!-- Main Content -->
+      <section class="main-content">
+        <div class="welcome-banner">
+          <div class="welcome-meme">😤</div>
+          <div class="welcome-title">YO WHAT'S GOOD CARLOS 💀</div>
+          <div class="welcome-subtitle">Empire status: We're literally cooking rn • No printer just fax</div>
+        </div>
+        
+        <!-- Stats -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">👁️</div>
+            <div class="stat-value">127K</div>
+            <div class="stat-label">Views (7D)</div>
+            <div class="stat-meme">we're so back</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-value">$2.8K</div>
+            <div class="stat-label">Revenue</div>
+            <div class="stat-meme">money printer go brrr</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-value">15K</div>
+            <div class="stat-label">Subs</div>
+            <div class="stat-meme">literally can't stop winning</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-value">4.2K</div>
+            <div class="stat-label">Watch Hours</div>
+            <div class="stat-meme">skill issue if lower</div>
+          </div>
+        </div>
+        
+        <!-- Tasks -->
+        <div class="tasks-section">
+          <div class="tasks-header">
+            <div>
+              <div class="tasks-title">🎯 ACTIVE MISSIONS</div>
+              <div class="tasks-subtitle">skill issue if incomplete</div>
+            </div>
+            <span style="font-size: 24px;">🗿</span>
+          </div>
+          
+          <div class="task-item">
+            <div class="task-priority priority-fire">🔥</div>
+            <div class="task-content">
+              <div class="task-title-text">THE LOST CITY OF GOLD</div>
+              <div class="task-meta">History Channel • Due: 2 hours</div>
+              <div class="task-meme">this is literally gonna go viral no cap</div>
+            </div>
+            <div class="task-progress">
+              <div class="task-progress-value">85%</div>
+              <div class="task-progress-label">almost cooked</div>
+            </div>
+          </div>
+          
+          <div class="task-item">
+            <div class="task-priority priority-fire">💀</div>
+            <div class="task-content">
+              <div class="task-title-text">MRBEAST VS LOGAN PAUL</div>
+              <div class="task-meta">Drama Channel • Ready to ship</div>
+              <div class="task-meme">the timeline is NOT ready for this</div>
+            </div>
+            <div class="task-progress">
+              <div class="task-progress-value">100%</div>
+              <div class="task-progress-label">W secured</div>
+            </div>
+          </div>
+          
+          <div class="task-item">
+            <div class="task-priority priority-mid">🤖</div>
+            <div class="task-content">
+              <div class="task-title-text">AI REVOLUTION 2025</div>
+              <div class="task-meta">Tech Channel • Research phase</div>
+              <div class="task-meme">Barvis doing nerd shit rn</div>
+            </div>
+            <div class="task-progress">
+              <div class="task-progress-value">45%</div>
+              <div class="task-progress-label">cooking</div>
+            </div>
+          </div>
+          
+          <div class="task-item">
+            <div class="task-priority priority-chill">😤</div>
+            <div class="task-content">
+              <div class="task-title-text">THUMBNAIL BATCH</div>
+              <div class="task-meta">Roof Report • 10 thumbnails</div>
+              <div class="task-meme">ez work tbh</div>
+            </div>
+            <div class="task-progress">
+              <div class="task-progress-value">20%</div>
+              <div class="task-progress-label">starting</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Activity Panel -->
+      <aside class="activity-panel">
+        <div class="activity-title">📢 LIVE FEED</div>
+        
+        <div class="activity-item">
+          <div class="activity-header">
+            <div class="activity-avatar" style="background: linear-gradient(135deg, #00ff00, #00cc00);">J</div>
+            <div class="activity-name">Jarvis</div>
+            <div class="activity-time">2m ago</div>
+          </div>
+          <div class="activity-text">Script draft completed for "Lost City of Gold"</div>
+          <div class="activity-reaction">W SECURED 🔥</div>
+        </div>
+        
+        <div class="activity-item">
+          <div class="activity-header">
+            <div class="activity-avatar" style="background: linear-gradient(135deg, #ff006e, #ff4d4d);">B</div>
+            <div class="activity-name">Barvis</div>
+            <div class="activity-time">5m ago</div>
+          </div>
+          <div class="activity-text">Building unhinged UI demos rn</div>
+          <div class="activity-reaction">HE'S LOCKED IN 🔒</div>
+        </div>
+        
+        <div class="activity-item">
+          <div class="activity-header">
+            <div class="activity-avatar" style="background: linear-gradient(135deg, #8338ec, #3a86ff);">J</div>
+            <div class="activity-name">Jug</div>
+            <div class="activity-time">8m ago</div>
+          </div>
+          <div class="activity-text">Roof Report hit 50K views 📈</div>
+          <div class="activity-reaction">STONKS 📈📈📈</div>
+        </div>
+        
+        <div class="activity-item">
+          <div class="activity-header">
+            <div class="activity-avatar" style="background: linear-gradient(135deg, #ffd700, #ff8c00);">C</div>
+            <div class="activity-name">Carlos</div>
+            <div class="activity-time">12m ago</div>
+          </div>
+          <div class="activity-text">"make it funny but operational"</div>
+          <div class="activity-reaction">THE VISION 🗿</div>
+        </div>
+        
+        <div class="quick-actions">
+          <button class="action-btn primary">🚀 SHIP CONTENT</button>
+          <button class="action-btn secondary">💬 TALK TO AI</button>
+          <button class="action-btn secondary">📊 STONKS REPORT</button>
+        </div>
+      </aside>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-meme">🗿 MEME HEADQUARTERS v6.9 • BUILT DIFFERENT</div>
+      <div>Powered by pure autism and zero sleep 💀</div>
+    </footer>
+  </div>
+</body>
+</html>
