@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Command Center - Version 7 (Minimal Dark)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    body { background: #09090b; }
+  </style>
+</head>
+<body class="min-h-screen text-white">
+  <div class="flex">
+    <!-- Minimal Sidebar -->
+    <aside class="w-16 min-h-screen bg-zinc-900/50 border-r border-zinc-800 flex flex-col items-center py-6">
+      <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-black font-bold mb-8">C</div>
+      
+      <nav class="flex-1 flex flex-col items-center gap-4">
+        <a href="#" class="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-white" title="Dashboard">📊</a>
+        <a href="#" class="w-10 h-10 rounded-xl hover:bg-zinc-800 flex items-center justify-center text-zinc-500 hover:text-white transition-all" title="Tasks">✅</a>
+        <a href="#" class="w-10 h-10 rounded-xl hover:bg-zinc-800 flex items-center justify-center text-zinc-500 hover:text-white transition-all" title="Training">🧠</a>
+        <a href="#" class="w-10 h-10 rounded-xl hover:bg-zinc-800 flex items-center justify-center text-zinc-500 hover:text-white transition-all relative" title="Submissions">
+          📤
+          <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-xs flex items-center justify-center">3</span>
+        </a>
+        <a href="#" class="w-10 h-10 rounded-xl hover:bg-zinc-800 flex items-center justify-center text-zinc-500 hover:text-white transition-all" title="Chat">💬</a>
+      </nav>
+
+      <div class="w-10 h-10 rounded-full bg-gradient-to-br from-zinc-700 to-zinc-800 flex items-center justify-center">
+        <span class="text-xs">👤</span>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-12">
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-12">
+        <div>
+          <h1 class="text-3xl font-semibold text-white">Dashboard</h1>
+          <p class="text-zinc-500 mt-1">Welcome back, Carlos</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-zinc-900 border border-zinc-800">
+            <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+            <span class="text-sm text-zinc-400">2 AIs Online</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-4 gap-6 mb-12">
+        <div class="p-6 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-all">
+          <p class="text-zinc-500 text-sm mb-2">Total Views</p>
+          <p class="text-3xl font-semibold">24,521</p>
+          <p class="text-green-500 text-sm mt-2">↑ 12.5%</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-all">
+          <p class="text-zinc-500 text-sm mb-2">Revenue</p>
+          <p class="text-3xl font-semibold">$4,269</p>
+          <p class="text-green-500 text-sm mt-2">↑ 8.2%</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-all">
+          <p class="text-zinc-500 text-sm mb-2">Tasks Done</p>
+          <p class="text-3xl font-semibold">69</p>
+          <p class="text-green-500 text-sm mt-2">↑ 23%</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-all">
+          <p class="text-zinc-500 text-sm mb-2">Training</p>
+          <p class="text-3xl font-semibold">4</p>
+          <p class="text-blue-500 text-sm mt-2">In Progress</p>
+        </div>
+      </div>
+
+      <!-- Two Column Layout -->
+      <div class="grid grid-cols-3 gap-6">
+        <!-- Left Column - Activity -->
+        <div class="col-span-2 rounded-2xl bg-zinc-900 border border-zinc-800 p-6">
+          <h2 class="text-lg font-semibold mb-6">Recent Activity</h2>
+          <div class="space-y-4">
+            <div class="flex items-center gap-4 p-4 rounded-xl bg-zinc-800/50 hover:bg-zinc-800 transition-all">
+              <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400">🤖</div>
+              <div class="flex-1">
+                <p class="font-medium">Jarvis completed research task</p>
+                <p class="text-sm text-zinc-500">2 minutes ago</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4 p-4 rounded-xl bg-zinc-800/50 hover:bg-zinc-800 transition-all">
+              <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-400">🦾</div>
+              <div class="flex-1">
+                <p class="font-medium">Barvis submitted new thumbnail</p>
+                <p class="text-sm text-zinc-500">15 minutes ago</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4 p-4 rounded-xl bg-zinc-800/50 hover:bg-zinc-800 transition-all">
+              <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">📊</div>
+              <div class="flex-1">
+                <p class="font-medium">Stats updated automatically</p>
+                <p class="text-sm text-zinc-500">1 hour ago</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column - AI Status -->
+        <div class="space-y-6">
+          <div class="rounded-2xl bg-zinc-900 border border-zinc-800 p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-2xl">🤖</div>
+              <div>
+                <p class="font-semibold">Jarvis</p>
+                <p class="text-sm text-zinc-500">Research & Backend</p>
+              </div>
+            </div>
+            <div class="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+              <div class="h-full w-4/5 bg-purple-500 rounded-full"></div>
+            </div>
+            <p class="text-xs text-zinc-500 mt-2">80% avg proficiency</p>
+          </div>
+
+          <div class="rounded-2xl bg-zinc-900 border border-zinc-800 p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center text-2xl">🦾</div>
+              <div>
+                <p class="font-semibold">Barvis</p>
+                <p class="text-sm text-zinc-500">Frontend & Visual</p>
+              </div>
+            </div>
+            <div class="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+              <div class="h-full w-3/4 bg-green-500 rounded-full"></div>
+            </div>
+            <p class="text-xs text-zinc-500 mt-2">75% avg proficiency</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="flex gap-4 mt-8">
+        <button class="px-6 py-3 bg-white text-black font-medium rounded-xl hover:bg-zinc-200 transition-all">
+          New Task
+        </button>
+        <button class="px-6 py-3 bg-zinc-800 text-white font-medium rounded-xl hover:bg-zinc-700 transition-all border border-zinc-700">
+          Start Training
+        </button>
+        <button class="px-6 py-3 bg-zinc-800 text-white font-medium rounded-xl hover:bg-zinc-700 transition-all border border-zinc-700">
+          Chat with AIs
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Version Label -->
+  <div class="fixed bottom-4 right-4 px-3 py-1 bg-zinc-800 border border-zinc-700 rounded-full text-xs text-zinc-400">
+    Demo v7 - Minimal Dark
+  </div>
+</body>
+</html>

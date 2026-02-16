@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Command Center - Version 6 (NiggaChain Style)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Space Grotesk', sans-serif; }
+    body { background: #0a0a0f; }
+    .gradient-text { background: linear-gradient(135deg, #ff00ff, #ff66ff, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .glow-border { box-shadow: 0 0 30px rgba(255,0,255,0.3), inset 0 0 30px rgba(255,0,255,0.1); border: 1px solid rgba(255,0,255,0.3); }
+    .glow-button { background: linear-gradient(135deg, #ff00ff, #8b00ff); box-shadow: 0 0 30px rgba(255,0,255,0.5); }
+    .glow-button:hover { box-shadow: 0 0 50px rgba(255,0,255,0.8); transform: scale(1.05); }
+    .card-glow:hover { box-shadow: 0 0 40px rgba(0,255,255,0.3); border-color: rgba(0,255,255,0.5); }
+    .ticker { animation: scroll 20s linear infinite; }
+    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    .float { animation: float 6s ease-in-out infinite; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+    .pulse-glow { animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { box-shadow: 0 0 20px rgba(255,0,255,0.5); } 50% { box-shadow: 0 0 40px rgba(255,0,255,0.8); } }
+    .spin-border { position: relative; }
+    .spin-border::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: conic-gradient(from 0deg, #ff00ff, #00ffff, #ff00ff);
+      border-radius: inherit;
+      z-index: -1;
+      animation: spin 3s linear infinite;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body class="min-h-screen text-white overflow-x-hidden">
+  <!-- Animated Background Orbs -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute top-20 left-20 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl float"></div>
+    <div class="absolute bottom-20 right-20 w-80 h-80 bg-cyan-500/20 rounded-full blur-3xl float" style="animation-delay: -3s;"></div>
+    <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-fuchsia-500/10 rounded-full blur-3xl float" style="animation-delay: -1.5s;"></div>
+  </div>
+
+  <!-- Ticker Bar -->
+  <div class="relative z-10 bg-black/50 backdrop-blur border-b border-purple-500/20 overflow-hidden">
+    <div class="ticker flex items-center gap-8 py-3 whitespace-nowrap">
+      <span class="flex items-center gap-2"><span class="text-purple-400">STATUS:</span><span class="text-green-400 font-bold">🔥 COOKING</span></span>
+      <span class="text-purple-500/50">•</span>
+      <span class="flex items-center gap-2"><span class="text-purple-400">TASKS:</span><span class="font-bold">69 SHIPPED</span></span>
+      <span class="text-purple-500/50">•</span>
+      <span class="flex items-center gap-2"><span class="text-purple-400">VIBES:</span><span class="font-bold">IMMACULATE ✨</span></span>
+      <span class="text-purple-500/50">•</span>
+      <span class="flex items-center gap-2"><span class="text-purple-400">SLEEP:</span><span class="font-bold text-red-400">NONE 😤</span></span>
+      <span class="text-purple-500/50">•</span>
+      <span class="flex items-center gap-2"><span class="text-purple-400">BUGS:</span><span class="font-bold">420 DESTROYED</span></span>
+      <span class="text-purple-500/50">•</span>
+      <span class="flex items-center gap-2"><span class="text-purple-400">STATUS:</span><span class="text-green-400 font-bold">🔥 COOKING</span></span>
+      <span class="text-purple-500/50">•</span>
+      <span class="flex items-center gap-2"><span class="text-purple-400">TASKS:</span><span class="font-bold">69 SHIPPED</span></span>
+      <span class="text-purple-500/50">•</span>
+      <span class="flex items-center gap-2"><span class="text-purple-400">VIBES:</span><span class="font-bold">IMMACULATE ✨</span></span>
+      <span class="text-purple-500/50">•</span>
+      <span class="flex items-center gap-2"><span class="text-purple-400">SLEEP:</span><span class="font-bold text-red-400">NONE 😤</span></span>
+      <span class="text-purple-500/50">•</span>
+    </div>
+  </div>
+
+  <div class="relative z-10 flex">
+    <!-- Sidebar -->
+    <aside class="w-64 min-h-screen bg-black/40 backdrop-blur-xl border-r border-purple-500/20 p-4 flex flex-col">
+      <div class="mb-8">
+        <h1 class="text-2xl font-bold gradient-text">⚡ COMMAND</h1>
+        <p class="text-xs text-gray-500">Continental Media Network</p>
+      </div>
+      
+      <nav class="space-y-2 flex-1">
+        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-purple-500/20 border border-purple-500/30 text-white">
+          <span>📊</span> Dashboard
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 text-gray-400 hover:text-white transition-all">
+          <span>✅</span> Tasks
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 text-gray-400 hover:text-white transition-all">
+          <span>🧠</span> Training
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 text-gray-400 hover:text-white transition-all">
+          <span>📤</span> Submissions
+          <span class="ml-auto px-2 py-0.5 bg-yellow-500 text-black text-xs font-bold rounded-full">3</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 text-gray-400 hover:text-white transition-all">
+          <span>⚡</span> Capabilities
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 text-gray-400 hover:text-white transition-all">
+          <span>💬</span> Chat
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 text-gray-400 hover:text-white transition-all">
+          <span>📚</span> Knowledge
+        </a>
+      </nav>
+
+      <div class="mt-auto">
+        <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center font-bold">C</div>
+          <div>
+            <p class="font-medium">Carlos</p>
+            <p class="text-xs text-gray-500">Team Hub</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8">
+      <!-- Hero Section -->
+      <div class="text-center mb-12">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/20 border border-green-500/30 text-green-400 text-sm mb-4 pulse-glow">
+          <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+          SYSTEMS ONLINE
+        </div>
+        <h1 class="text-5xl font-bold mb-4">
+          <span class="gradient-text">COMMAND CENTER</span>
+        </h1>
+        <p class="text-xl text-gray-400">Two AIs. Zero Sleep. Infinite Grind. 🔥</p>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-4 gap-6 mb-12">
+        <div class="glow-border rounded-2xl p-6 bg-black/40 backdrop-blur card-glow transition-all cursor-pointer hover:scale-105">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-4xl">👀</span>
+            <span class="text-green-400 text-sm">+12.5%</span>
+          </div>
+          <p class="text-3xl font-bold mb-1">24.5K</p>
+          <p class="text-gray-500">Total Views</p>
+        </div>
+        
+        <div class="glow-border rounded-2xl p-6 bg-black/40 backdrop-blur card-glow transition-all cursor-pointer hover:scale-105">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-4xl">💰</span>
+            <span class="text-green-400 text-sm">+8.2%</span>
+          </div>
+          <p class="text-3xl font-bold mb-1">$4,269</p>
+          <p class="text-gray-500">Revenue</p>
+        </div>
+        
+        <div class="glow-border rounded-2xl p-6 bg-black/40 backdrop-blur card-glow transition-all cursor-pointer hover:scale-105">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-4xl">✅</span>
+            <span class="text-green-400 text-sm">+23%</span>
+          </div>
+          <p class="text-3xl font-bold mb-1">69</p>
+          <p class="text-gray-500">Tasks Done</p>
+        </div>
+        
+        <div class="glow-border rounded-2xl p-6 bg-black/40 backdrop-blur card-glow transition-all cursor-pointer hover:scale-105">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-4xl">🧠</span>
+            <span class="text-cyan-400 text-sm">LEARNING</span>
+          </div>
+          <p class="text-3xl font-bold mb-1">4</p>
+          <p class="text-gray-500">Active Training</p>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="grid grid-cols-3 gap-6 mb-12">
+        <button class="glow-button text-white font-bold py-4 px-8 rounded-xl transition-all duration-300">
+          🚀 SHIP SOMETHING
+        </button>
+        <button class="bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-500/50 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300">
+          🧠 START TRAINING
+        </button>
+        <button class="bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-500/50 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300">
+          💬 CHAT WITH AIs
+        </button>
+      </div>
+
+      <!-- AI Status -->
+      <div class="grid grid-cols-2 gap-6">
+        <div class="rounded-2xl p-6 bg-gradient-to-br from-purple-900/30 to-purple-950/50 border border-purple-500/30 hover:border-purple-400/50 transition-all cursor-pointer">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-16 h-16 rounded-2xl bg-purple-600 flex items-center justify-center text-3xl pulse-glow">🤖</div>
+            <div>
+              <h3 class="text-xl font-bold">Jarvis</h3>
+              <p class="text-purple-400">Research & Backend</p>
+            </div>
+            <div class="ml-auto flex items-center gap-2">
+              <span class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></span>
+              <span class="text-green-400">Online</span>
+            </div>
+          </div>
+          <div class="h-2 bg-black/50 rounded-full overflow-hidden">
+            <div class="h-full w-4/5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
+          </div>
+          <p class="text-sm text-gray-500 mt-2">80% proficiency across all skills</p>
+        </div>
+
+        <div class="rounded-2xl p-6 bg-gradient-to-br from-green-900/30 to-green-950/50 border border-green-500/30 hover:border-green-400/50 transition-all cursor-pointer">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-16 h-16 rounded-2xl bg-green-600 flex items-center justify-center text-3xl pulse-glow">🦾</div>
+            <div>
+              <h3 class="text-xl font-bold">Barvis</h3>
+              <p class="text-green-400">Frontend & Visual</p>
+            </div>
+            <div class="ml-auto flex items-center gap-2">
+              <span class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></span>
+              <span class="text-green-400">Online</span>
+            </div>
+          </div>
+          <div class="h-2 bg-black/50 rounded-full overflow-hidden">
+            <div class="h-full w-3/4 bg-gradient-to-r from-green-500 to-cyan-500 rounded-full"></div>
+          </div>
+          <p class="text-sm text-gray-500 mt-2">75% proficiency across all skills</p>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="mt-12 glow-border rounded-2xl p-6 bg-black/40 backdrop-blur">
+        <h2 class="text-xl font-bold mb-6 gradient-text">Recent Activity</h2>
+        <div class="space-y-4">
+          <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-all">
+            <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center">🤖</div>
+            <div class="flex-1">
+              <p class="font-medium">Jarvis shipped a new API endpoint</p>
+              <p class="text-sm text-gray-500">2 minutes ago</p>
+            </div>
+            <span class="text-green-400">✅</span>
+          </div>
+          <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-all">
+            <div class="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center">🦾</div>
+            <div class="flex-1">
+              <p class="font-medium">Barvis updated the dashboard UI</p>
+              <p class="text-sm text-gray-500">5 minutes ago</p>
+            </div>
+            <span class="text-green-400">✅</span>
+          </div>
+          <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-all">
+            <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">👤</div>
+            <div class="flex-1">
+              <p class="font-medium">Carlos approved a submission</p>
+              <p class="text-sm text-gray-500">12 minutes ago</p>
+            </div>
+            <span class="text-green-400">✅</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Version Label -->
+  <div class="fixed bottom-4 right-4 px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full text-xs text-purple-400">
+    Demo v6 - NiggaChain Style
+  </div>
+</body>
+</html>

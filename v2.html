@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Command Center - V2: Cyberpunk</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    body { 
+      font-family: 'Share Tech Mono', monospace;
+      background: #0a0a0a;
+      background-image: 
+        linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+    h1, h2, h3, h4, h5, h6, .font-display { font-family: 'Orbitron', sans-serif; }
+    
+    .neon-green { color: #00ff88; text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 40px #00ff8855; }
+    .neon-cyan { color: #00ffff; text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; }
+    .neon-pink { color: #ff00ff; text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; }
+    .neon-yellow { color: #ffff00; text-shadow: 0 0 10px #ffff00, 0 0 20px #ffff00; }
+    
+    .border-neon { border-color: #00ff88; box-shadow: 0 0 10px #00ff8844, inset 0 0 10px #00ff8822; }
+    .border-neon-cyan { border-color: #00ffff; box-shadow: 0 0 10px #00ffff44, inset 0 0 10px #00ffff22; }
+    
+    .card-cyber {
+      background: linear-gradient(135deg, rgba(0,255,136,0.05) 0%, rgba(0,0,0,0.8) 100%);
+      border: 1px solid #00ff8833;
+      position: relative;
+    }
+    .card-cyber::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, #00ff88, transparent);
+    }
+    .card-cyber::after {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 2px; height: 100%;
+      background: linear-gradient(180deg, transparent, #00ff88, transparent);
+    }
+    
+    /* Scanline effect */
+    .scanlines::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 255, 136, 0.03) 2px,
+        rgba(0, 255, 136, 0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    /* Glitch effect */
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(-2px, -2px); }
+      60% { transform: translate(2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+      100% { transform: translate(0); }
+    }
+    .glitch:hover { animation: glitch 0.3s ease infinite; }
+    
+    /* Terminal cursor */
+    @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+    .cursor { animation: blink 1s infinite; }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0a0a0a; }
+    ::-webkit-scrollbar-thumb { background: #00ff88; }
+  </style>
+</head>
+<body class="min-h-screen text-white scanlines">
+  <!-- VERSION BADGE -->
+  <div class="fixed top-4 right-4 z-50 px-4 py-2 bg-black border border-[#00ff88] text-[#00ff88] text-sm font-display">
+    V2: CYBERPUNK
+  </div>
+
+  <!-- Header Bar -->
+  <header class="border-b border-[#00ff8833] bg-black/80 backdrop-blur-sm">
+    <div class="flex items-center justify-between px-6 py-3">
+      <div class="flex items-center gap-4">
+        <div class="w-10 h-10 border-2 border-[#00ff88] flex items-center justify-center neon-green text-xl font-display">⚡</div>
+        <div>
+          <h1 class="font-display text-[#00ff88] tracking-wider">COMMAND_CENTER</h1>
+          <p class="text-[#00ff8866] text-xs">// CONTINENTAL MEDIA NETWORK</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-6 text-sm">
+        <span class="text-[#00ff88]">SYS_STATUS: <span class="neon-green">ONLINE</span></span>
+        <span class="text-[#00ffff]">UPTIME: <span class="neon-cyan">99.9%</span></span>
+        <span class="text-[#ffff00]">THREATS: <span class="neon-yellow">0</span></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="flex min-h-[calc(100vh-60px)]">
+    <!-- Sidebar -->
+    <aside class="w-64 border-r border-[#00ff8833] bg-black/60 p-4">
+      <div class="mb-6">
+        <p class="text-[#00ff8866] text-xs mb-2">// NAVIGATION</p>
+        <div class="h-px bg-gradient-to-r from-[#00ff88] to-transparent"></div>
+      </div>
+      
+      <nav class="space-y-2">
+        <a href="#" class="flex items-center gap-3 px-4 py-3 bg-[#00ff8811] border-l-2 border-[#00ff88] text-[#00ff88]">
+          <span class="text-lg">◉</span>
+          <span class="font-display text-sm tracking-wide">DASHBOARD</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#00ff8866] hover:text-[#00ff88] hover:bg-[#00ff8808] transition-all">
+          <span class="text-lg">◎</span>
+          <span class="font-display text-sm tracking-wide">NEURAL_CHAT</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#00ff8866] hover:text-[#00ff88] hover:bg-[#00ff8808] transition-all">
+          <span class="text-lg">◎</span>
+          <span class="font-display text-sm tracking-wide">PROJECTS</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#00ff8866] hover:text-[#00ff88] hover:bg-[#00ff8808] transition-all">
+          <span class="text-lg">◎</span>
+          <span class="font-display text-sm tracking-wide">TASK_QUEUE</span>
+        </a>
+        
+        <div class="pt-4">
+          <p class="text-[#00ffff66] text-xs mb-2">// AI_SYSTEMS</p>
+          <div class="h-px bg-gradient-to-r from-[#00ffff] to-transparent mb-2"></div>
+        </div>
+        
+        <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#00ffff66] hover:text-[#00ffff] hover:bg-[#00ffff08] transition-all">
+          <span class="text-lg">◎</span>
+          <span class="font-display text-sm tracking-wide">TRAINING</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#00ffff66] hover:text-[#00ffff] hover:bg-[#00ffff08] transition-all">
+          <span class="text-lg">◎</span>
+          <span class="font-display text-sm tracking-wide">SUBMISSIONS</span>
+          <span class="ml-auto px-2 py-0.5 text-xs bg-[#ff00ff] text-black font-bold">3</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 text-[#00ffff66] hover:text-[#00ffff] hover:bg-[#00ffff08] transition-all">
+          <span class="text-lg">◎</span>
+          <span class="font-display text-sm tracking-wide">CAPABILITIES</span>
+        </a>
+      </nav>
+      
+      <!-- AI Status Terminal -->
+      <div class="mt-8 p-4 bg-black border border-[#00ff8833]">
+        <p class="text-[#00ff8866] text-xs mb-2">// AI_NODES</p>
+        <div class="space-y-2 font-mono text-sm">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 bg-[#00ff88] animate-pulse"></span>
+            <span class="text-[#00ff88]">JARVIS</span>
+            <span class="text-[#00ff8866] ml-auto">ACTIVE</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 bg-[#00ff88] animate-pulse"></span>
+            <span class="text-[#00ff88]">BARVIS</span>
+            <span class="text-[#00ff8866] ml-auto">ACTIVE</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- User -->
+      <div class="mt-4 p-4 border border-[#00ff8833] bg-black">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 border-2 border-[#ff00ff] flex items-center justify-center text-[#ff00ff] font-display font-bold">C</div>
+          <div>
+            <p class="text-[#ff00ff] font-display text-sm">CARLOS</p>
+            <p class="text-[#ff00ff66] text-xs">ADMIN_ACCESS</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 p-8">
+      <!-- Welcome -->
+      <div class="mb-8">
+        <p class="text-[#00ff8866] text-sm mb-2">// SYSTEM_GREETING</p>
+        <h1 class="text-4xl font-display neon-green glitch mb-2">
+          WELCOME_BACK<span class="cursor">_</span>
+        </h1>
+        <p class="text-[#00ff8866]">&gt; User: CARLOS | Access Level: OMEGA | Last Login: 2h ago</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-4 gap-6 mb-8">
+        <div class="card-cyber p-6">
+          <p class="text-[#00ff8866] text-xs mb-1">// VIEWS_7D</p>
+          <p class="text-3xl font-display neon-green">127,432</p>
+          <p class="text-[#00ff88] text-sm mt-2">▲ +12.3%</p>
+        </div>
+        <div class="card-cyber p-6">
+          <p class="text-[#00ffff66] text-xs mb-1">// REVENUE_MTD</p>
+          <p class="text-3xl font-display neon-cyan">$2,847</p>
+          <p class="text-[#00ffff] text-sm mt-2">▲ +8.1%</p>
+        </div>
+        <div class="card-cyber p-6">
+          <p class="text-[#ff00ff66] text-xs mb-1">// SUBSCRIBERS</p>
+          <p class="text-3xl font-display neon-pink">15,023</p>
+          <p class="text-[#ff00ff] text-sm mt-2">▲ +234</p>
+        </div>
+        <div class="card-cyber p-6">
+          <p class="text-[#ffff0066] text-xs mb-1">// WATCH_HOURS</p>
+          <p class="text-3xl font-display neon-yellow">4,231</p>
+          <p class="text-red-500 text-sm mt-2">▼ -2.1%</p>
+        </div>
+      </div>
+
+      <!-- Two columns -->
+      <div class="grid grid-cols-3 gap-8">
+        <!-- Terminal Actions -->
+        <div class="card-cyber p-6">
+          <p class="text-[#00ff8866] text-xs mb-4">// QUICK_COMMANDS</p>
+          <div class="space-y-3 font-mono">
+            <a href="#" class="block p-3 border border-[#00ff8833] hover:border-[#00ff88] hover:bg-[#00ff8808] transition-all group">
+              <span class="text-[#00ff8866] group-hover:text-[#00ff88]">&gt;</span>
+              <span class="text-[#00ff88] ml-2">new_script --ai</span>
+            </a>
+            <a href="#" class="block p-3 border border-[#00ff8833] hover:border-[#00ff88] hover:bg-[#00ff8808] transition-all group">
+              <span class="text-[#00ff8866] group-hover:text-[#00ff88]">&gt;</span>
+              <span class="text-[#00ff88] ml-2">list_projects</span>
+            </a>
+            <a href="#" class="block p-3 border border-[#00ff8833] hover:border-[#00ff88] hover:bg-[#00ff8808] transition-all group">
+              <span class="text-[#00ff8866] group-hover:text-[#00ff88]">&gt;</span>
+              <span class="text-[#00ff88] ml-2">show_tasks</span>
+            </a>
+            <a href="#" class="block p-3 border border-[#00ffff33] hover:border-[#00ffff] hover:bg-[#00ffff08] transition-all group">
+              <span class="text-[#00ffff66] group-hover:text-[#00ffff]">&gt;</span>
+              <span class="text-[#00ffff] ml-2">init_ai_chat</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Content Pipeline -->
+        <div class="col-span-2 card-cyber p-6">
+          <div class="flex items-center justify-between mb-6">
+            <p class="text-[#00ff8866] text-xs">// CONTENT_PIPELINE</p>
+            <a href="#" class="text-[#00ff88] text-sm hover:underline">[VIEW_ALL]</a>
+          </div>
+          
+          <!-- Progress bars -->
+          <div class="grid grid-cols-4 gap-4 mb-6">
+            <div>
+              <div class="h-1 bg-[#00ffff] mb-2" style="box-shadow: 0 0 10px #00ffff"></div>
+              <p class="text-[#00ffff] font-display text-xl">3</p>
+              <p class="text-[#00ffff66] text-xs">RESEARCH</p>
+            </div>
+            <div>
+              <div class="h-1 bg-[#ff00ff] mb-2" style="box-shadow: 0 0 10px #ff00ff"></div>
+              <p class="text-[#ff00ff] font-display text-xl">5</p>
+              <p class="text-[#ff00ff66] text-xs">SCRIPTING</p>
+            </div>
+            <div>
+              <div class="h-1 bg-[#ffff00] mb-2" style="box-shadow: 0 0 10px #ffff00"></div>
+              <p class="text-[#ffff00] font-display text-xl">2</p>
+              <p class="text-[#ffff0066] text-xs">PRODUCTION</p>
+            </div>
+            <div>
+              <div class="h-1 bg-[#00ff88] mb-2" style="box-shadow: 0 0 10px #00ff88"></div>
+              <p class="text-[#00ff88] font-display text-xl">4</p>
+              <p class="text-[#00ff8866] text-xs">READY</p>
+            </div>
+          </div>
+          
+          <!-- Projects list -->
+          <div class="space-y-3 font-mono text-sm">
+            <div class="flex items-center gap-4 p-3 border border-[#00ff8833] hover:border-[#00ff88] transition-all cursor-pointer">
+              <span class="text-[#00ff88]">[▶]</span>
+              <span class="flex-1 text-white">The_Lost_City_of_Gold</span>
+              <span class="text-[#ff00ff]">[SCRIPTING]</span>
+              <span class="text-[#00ff8866]">65%</span>
+            </div>
+            <div class="flex items-center gap-4 p-3 border border-[#00ff8833] hover:border-[#00ff88] transition-all cursor-pointer">
+              <span class="text-[#00ff88]">[▶]</span>
+              <span class="flex-1 text-white">MrBeast_vs_Logan_Paul</span>
+              <span class="text-[#00ffff]">[RESEARCH]</span>
+              <span class="text-[#00ff8866]">30%</span>
+            </div>
+            <div class="flex items-center gap-4 p-3 border border-[#00ff8833] hover:border-[#00ff88] transition-all cursor-pointer">
+              <span class="text-[#00ff88]">[▶]</span>
+              <span class="flex-1 text-white">AI_Revolution_2025</span>
+              <span class="text-[#00ff88]">[READY]</span>
+              <span class="text-[#00ff8866]">100%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="text-center mt-12">
+        <button class="px-8 py-4 border-2 border-[#00ff88] text-[#00ff88] font-display tracking-wider hover:bg-[#00ff88] hover:text-black transition-all" style="box-shadow: 0 0 20px #00ff8844">
+          [INITIALIZE_AI_INTERFACE]
+        </button>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
