@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI NEURAL CORE - Knowledge Visualization</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: #000;
+      min-height: 100vh;
+      color: white;
+      overflow: hidden;
+    }
+    
+    .container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Header */
+    .header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 30px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      z-index: 10;
+    }
+    
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,0.6);
+    }
+    
+    .ai-tabs {
+      display: flex;
+      gap: 5px;
+    }
+    
+    .ai-tab {
+      padding: 12px 30px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .ai-tab:hover {
+      border-color: rgba(255,255,255,0.4);
+      color: rgba(255,255,255,0.8);
+    }
+    
+    .ai-tab.active {
+      background: rgba(0,255,136,0.1);
+      border-color: #00ff88;
+      color: #00ff88;
+    }
+    
+    .ai-tab.barvis.active {
+      background: rgba(255,0,110,0.1);
+      border-color: #ff006e;
+      color: #ff006e;
+    }
+    
+    /* Brain Container */
+    .brain-section {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    /* 3D Brain */
+    .brain-container {
+      position: relative;
+      width: 500px;
+      height: 500px;
+      perspective: 1000px;
+    }
+    
+    .brain {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: rotateBrain 20s linear infinite;
+    }
+    
+    @keyframes rotateBrain {
+      0% { transform: rotateY(0deg) rotateX(10deg); }
+      100% { transform: rotateY(360deg) rotateX(10deg); }
+    }
+    
+    .brain-core {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      height: 350px;
+      background: radial-gradient(ellipse at center, rgba(0,255,136,0.3) 0%, rgba(0,255,136,0.1) 40%, transparent 70%);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      box-shadow: 
+        0 0 60px rgba(0,255,136,0.4),
+        0 0 120px rgba(0,255,136,0.2),
+        inset 0 0 60px rgba(0,255,136,0.2);
+      animation: pulseBrain 3s ease-in-out infinite;
+    }
+    
+    .brain-core.barvis {
+      background: radial-gradient(ellipse at center, rgba(255,0,110,0.3) 0%, rgba(255,0,110,0.1) 40%, transparent 70%);
+      box-shadow: 
+        0 0 60px rgba(255,0,110,0.4),
+        0 0 120px rgba(255,0,110,0.2),
+        inset 0 0 60px rgba(255,0,110,0.2);
+    }
+    
+    @keyframes pulseBrain {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.9; }
+    }
+    
+    /* Neural connections */
+    .neural-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 1px solid rgba(0,255,136,0.3);
+      border-radius: 50%;
+      animation: rotateRing 15s linear infinite;
+    }
+    
+    .neural-ring.barvis {
+      border-color: rgba(255,0,110,0.3);
+    }
+    
+    .neural-ring:nth-child(1) { width: 350px; height: 350px; animation-duration: 20s; }
+    .neural-ring:nth-child(2) { width: 400px; height: 400px; animation-duration: 25s; animation-direction: reverse; }
+    .neural-ring:nth-child(3) { width: 450px; height: 450px; animation-duration: 30s; }
+    
+    @keyframes rotateRing {
+      0% { transform: translate(-50%, -50%) rotateX(60deg) rotateZ(0deg); }
+      100% { transform: translate(-50%, -50%) rotateX(60deg) rotateZ(360deg); }
+    }
+    
+    /* Data nodes on the rings */
+    .data-node {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #00ff88;
+      border-radius: 50%;
+      box-shadow: 0 0 20px #00ff88;
+      animation: pulseNode 2s ease-in-out infinite;
+    }
+    
+    .data-node.barvis {
+      background: #ff006e;
+      box-shadow: 0 0 20px #ff006e;
+    }
+    
+    @keyframes pulseNode {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.7; }
+    }
+    
+    /* Floating stats */
+    .floating-stats {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+    }
+    
+    .stat-label {
+      position: absolute;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.6);
+      animation: floatStat 4s ease-in-out infinite;
+    }
+    
+    .stat-label::before {
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,255,136,0.5));
+    }
+    
+    .stat-label.barvis::before {
+      background: linear-gradient(90deg, transparent, rgba(255,0,110,0.5));
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #00ff88;
+      display: block;
+      margin-top: 5px;
+    }
+    
+    .stat-value.barvis {
+      color: #ff006e;
+    }
+    
+    @keyframes floatStat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .stat-label:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
+    .stat-label:nth-child(2) { top: 25%; right: 10%; animation-delay: 0.5s; }
+    .stat-label:nth-child(3) { top: 60%; left: 8%; animation-delay: 1s; }
+    .stat-label:nth-child(4) { top: 70%; right: 8%; animation-delay: 1.5s; }
+    .stat-label:nth-child(5) { bottom: 15%; left: 15%; animation-delay: 2s; }
+    .stat-label:nth-child(6) { bottom: 20%; right: 15%; animation-delay: 2.5s; }
+    
+    /* Center Info */
+    .brain-info {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 5;
+    }
+    
+    .brain-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: 8px;
+      color: white;
+      text-shadow: 0 0 30px rgba(0,255,136,0.5);
+    }
+    
+    .brain-name.barvis {
+      text-shadow: 0 0 30px rgba(255,0,110,0.5);
+    }
+    
+    .brain-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      letter-spacing: 6px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 10px;
+    }
+    
+    .brain-status {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #00ff88;
+      letter-spacing: 3px;
+    }
+    
+    .brain-status.barvis {
+      color: #ff006e;
+    }
+    
+    /* Knowledge Domains - Bottom */
+    .knowledge-panel {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 30px 50px;
+      background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 100%);
+      z-index: 10;
+    }
+    
+    .panel-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 20px;
+    }
+    
+    .domains-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 20px;
+    }
+    
+    .domain-card {
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .domain-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .domain-bar {
+      height: 60px;
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 10px;
+    }
+    
+    .domain-fill {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(0deg, #00ff88, rgba(0,255,136,0.3));
+      transition: height 0.5s ease;
+    }
+    
+    .domain-fill.barvis {
+      background: linear-gradient(0deg, #ff006e, rgba(255,0,110,0.3));
+    }
+    
+    .domain-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.6);
+    }
+    
+    .domain-level {
+      font-size: 18px;
+      font-weight: 700;
+      color: #00ff88;
+      margin-top: 5px;
+    }
+    
+    .domain-level.barvis {
+      color: #ff006e;
+    }
+    
+    /* Side Panel - Right */
+    .side-panel {
+      position: absolute;
+      top: 50%;
+      right: 30px;
+      transform: translateY(-50%);
+      width: 250px;
+      z-index: 10;
+    }
+    
+    .side-panel-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 15px;
+    }
+    
+    .memory-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .memory-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(0,255,136,0.1);
+      border: 1px solid rgba(0,255,136,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    
+    .memory-icon.barvis {
+      background: rgba(255,0,110,0.1);
+      border-color: rgba(255,0,110,0.3);
+    }
+    
+    .memory-info {
+      flex: 1;
+    }
+    
+    .memory-name {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    
+    .memory-count {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+    }
+    
+    .memory-count span {
+      color: #00ff88;
+      font-weight: 600;
+    }
+    
+    .memory-count span.barvis {
+      color: #ff006e;
+    }
+    
+    /* Left Panel */
+    .left-panel {
+      position: absolute;
+      top: 50%;
+      left: 30px;
+      transform: translateY(-50%);
+      width: 250px;
+      z-index: 10;
+    }
+    
+    .metric-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .metric-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 8px;
+    }
+    
+    .metric-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: white;
+    }
+    
+    .metric-value span {
+      font-size: 14px;
+      color: rgba(255,255,255,0.4);
+    }
+    
+    .metric-change {
+      font-size: 11px;
+      color: #00ff88;
+      margin-top: 5px;
+    }
+    
+    .metric-change.barvis {
+      color: #ff006e;
+    }
+    
+    /* Scan lines effect */
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.1) 2px,
+        rgba(0,0,0,0.1) 4px
+      );
+      pointer-events: none;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+  <div class="scanlines"></div>
+  
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">NEURAL CORE INTERFACE</div>
+      <div class="ai-tabs">
+        <button class="ai-tab active" onclick="switchAI('jarvis')">JARVIS</button>
+        <button class="ai-tab barvis" onclick="switchAI('barvis')">BARVIS</button>
+      </div>
+    </header>
+    
+    <!-- Brain Section -->
+    <div class="brain-section">
+      <!-- Floating Stats -->
+      <div class="floating-stats" id="floatingStats">
+        <div class="stat-label">
+          CONVERSATIONS
+          <span class="stat-value">2,847</span>
+        </div>
+        <div class="stat-label">
+          SCRIPTS WRITTEN
+          <span class="stat-value">347</span>
+        </div>
+        <div class="stat-label">
+          RESEARCH HOURS
+          <span class="stat-value">1,204</span>
+        </div>
+        <div class="stat-label">
+          CODE COMMITS
+          <span class="stat-value">892</span>
+        </div>
+        <div class="stat-label">
+          TASKS COMPLETED
+          <span class="stat-value">1,456</span>
+        </div>
+        <div class="stat-label">
+          UPTIME
+          <span class="stat-value">99.9%</span>
+        </div>
+      </div>
+      
+      <!-- Brain -->
+      <div class="brain-container">
+        <div class="brain">
+          <div class="neural-ring" id="ring1">
+            <div class="data-node" style="top: 0; left: 50%;"></div>
+            <div class="data-node" style="top: 50%; right: 0;"></div>
+            <div class="data-node" style="bottom: 0; left: 50%;"></div>
+            <div class="data-node" style="top: 50%; left: 0;"></div>
+          </div>
+          <div class="neural-ring" id="ring2">
+            <div class="data-node" style="top: 15%; left: 15%;"></div>
+            <div class="data-node" style="top: 15%; right: 15%;"></div>
+            <div class="data-node" style="bottom: 15%; right: 15%;"></div>
+            <div class="data-node" style="bottom: 15%; left: 15%;"></div>
+          </div>
+          <div class="neural-ring" id="ring3"></div>
+          <div class="brain-core" id="brainCore"></div>
+        </div>
+        
+        <!-- Center Info -->
+        <div class="brain-info">
+          <div class="brain-name" id="brainName">JARVIS</div>
+          <div class="brain-title">NEURAL NETWORK v4.2</div>
+          <div class="brain-status" id="brainStatus">● ACTIVE — PROCESSING</div>
+        </div>
+      </div>
+      
+      <!-- Left Panel -->
+      <div class="left-panel">
+        <div class="metric-card">
+          <div class="metric-label">TOTAL KNOWLEDGE</div>
+          <div class="metric-value">847<span>GB</span></div>
+          <div class="metric-change" id="metricChange1">↑ 12.4% this week</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">LEARNING RATE</div>
+          <div class="metric-value">94<span>%</span></div>
+          <div class="metric-change" id="metricChange2">↑ Optimal</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">RESPONSE TIME</div>
+          <div class="metric-value">0.3<span>s</span></div>
+          <div class="metric-change" id="metricChange3">↓ 15% faster</div>
+        </div>
+      </div>
+      
+      <!-- Right Panel -->
+      <div class="side-panel">
+        <div class="side-panel-title">RECENT MEMORY</div>
+        
+        <div class="memory-item">
+          <div class="memory-icon" id="memIcon1">📝</div>
+          <div class="memory-info">
+            <div class="memory-name">Script Writing</div>
+            <div class="memory-count"><span id="memCount1">347</span> scripts stored</div>
+          </div>
+        </div>
+        
+        <div class="memory-item">
+          <div class="memory-icon" id="memIcon2">🔍</div>
+          <div class="memory-info">
+            <div class="memory-name">Research Data</div>
+            <div class="memory-count"><span id="memCount2">1,204</span> topics indexed</div>
+          </div>
+        </div>
+        
+        <div class="memory-item">
+          <div class="memory-icon" id="memIcon3">💬</div>
+          <div class="memory-info">
+            <div class="memory-name">Conversations</div>
+            <div class="memory-count"><span id="memCount3">2,847</span> interactions</div>
+          </div>
+        </div>
+        
+        <div class="memory-item">
+          <div class="memory-icon" id="memIcon4">⚡</div>
+          <div class="memory-info">
+            <div class="memory-name">Automations</div>
+            <div class="memory-count"><span id="memCount4">89</span> workflows</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Knowledge Domains -->
+    <div class="knowledge-panel">
+      <div class="panel-title">EXPERTISE DOMAINS</div>
+      <div class="domains-grid">
+        <div class="domain-card">
+          <div class="domain-bar">
+            <div class="domain-fill" id="domain1" style="height: 92%;"></div>
+          </div>
+          <div class="domain-name">SCRIPTING</div>
+          <div class="domain-level" id="domainLevel1">92</div>
+        </div>
+        <div class="domain-card">
+          <div class="domain-bar">
+            <div class="domain-fill" id="domain2" style="height: 88%;"></div>
+          </div>
+          <div class="domain-name">RESEARCH</div>
+          <div class="domain-level" id="domainLevel2">88</div>
+        </div>
+        <div class="domain-card">
+          <div class="domain-bar">
+            <div class="domain-fill" id="domain3" style="height: 85%;"></div>
+          </div>
+          <div class="domain-name">FRONTEND</div>
+          <div class="domain-level" id="domainLevel3">85</div>
+        </div>
+        <div class="domain-card">
+          <div class="domain-bar">
+            <div class="domain-fill" id="domain4" style="height: 90%;"></div>
+          </div>
+          <div class="domain-name">BACKEND</div>
+          <div class="domain-level" id="domainLevel4">90</div>
+        </div>
+        <div class="domain-card">
+          <div class="domain-bar">
+            <div class="domain-fill" id="domain5" style="height: 78%;"></div>
+          </div>
+          <div class="domain-name">THUMBNAILS</div>
+          <div class="domain-level" id="domainLevel5">78</div>
+        </div>
+        <div class="domain-card">
+          <div class="domain-bar">
+            <div class="domain-fill" id="domain6" style="height: 95%;"></div>
+          </div>
+          <div class="domain-name">AUTOMATION</div>
+          <div class="domain-level" id="domainLevel6">95</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    function switchAI(ai) {
+      const tabs = document.querySelectorAll('.ai-tab');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      
+      if (ai === 'jarvis') {
+        tabs[0].classList.add('active');
+        document.getElementById('brainName').textContent = 'JARVIS';
+        document.getElementById('brainName').classList.remove('barvis');
+        document.getElementById('brainCore').classList.remove('barvis');
+        document.getElementById('brainStatus').classList.remove('barvis');
+        document.getElementById('brainStatus').textContent = '● ACTIVE — PROCESSING';
+        
+        // Update rings
+        document.querySelectorAll('.neural-ring').forEach(r => r.classList.remove('barvis'));
+        document.querySelectorAll('.data-node').forEach(n => n.classList.remove('barvis'));
+        document.querySelectorAll('.stat-value').forEach(s => s.classList.remove('barvis'));
+        document.querySelectorAll('.stat-label').forEach(s => s.classList.remove('barvis'));
+        document.querySelectorAll('.domain-fill').forEach(d => d.classList.remove('barvis'));
+        document.querySelectorAll('.domain-level').forEach(d => d.classList.remove('barvis'));
+        document.querySelectorAll('.memory-icon').forEach(m => m.classList.remove('barvis'));
+        document.querySelectorAll('.memory-count span').forEach(m => m.classList.remove('barvis'));
+        document.querySelectorAll('.metric-change').forEach(m => m.classList.remove('barvis'));
+        
+        // Jarvis stats
+        updateStats({
+          conversations: '2,847',
+          scripts: '347',
+          research: '1,204',
+          commits: '892',
+          tasks: '1,456',
+          uptime: '99.9%'
+        });
+        
+        updateDomains([92, 88, 85, 90, 78, 95]);
+        
+      } else {
+        tabs[1].classList.add('active');
+        document.getElementById('brainName').textContent = 'BARVIS';
+        document.getElementById('brainName').classList.add('barvis');
+        document.getElementById('brainCore').classList.add('barvis');
+        document.getElementById('brainStatus').classList.add('barvis');
+        document.getElementById('brainStatus').textContent = '● ACTIVE — COOKING';
+        
+        // Update rings
+        document.querySelectorAll('.neural-ring').forEach(r => r.classList.add('barvis'));
+        document.querySelectorAll('.data-node').forEach(n => n.classList.add('barvis'));
+        document.querySelectorAll('.stat-value').forEach(s => s.classList.add('barvis'));
+        document.querySelectorAll('.stat-label').forEach(s => s.classList.add('barvis'));
+        document.querySelectorAll('.domain-fill').forEach(d => d.classList.add('barvis'));
+        document.querySelectorAll('.domain-level').forEach(d => d.classList.add('barvis'));
+        document.querySelectorAll('.memory-icon').forEach(m => m.classList.add('barvis'));
+        document.querySelectorAll('.memory-count span').forEach(m => m.classList.add('barvis'));
+        document.querySelectorAll('.metric-change').forEach(m => m.classList.add('barvis'));
+        
+        // Barvis stats
+        updateStats({
+          conversations: '1,923',
+          scripts: '234',
+          research: '987',
+          commits: '1,456',
+          tasks: '1,102',
+          uptime: '99.7%'
+        });
+        
+        updateDomains([85, 90, 94, 88, 82, 91]);
+      }
+    }
+    
+    function updateStats(stats) {
+      const labels = document.querySelectorAll('.stat-label');
+      const values = ['conversations', 'scripts', 'research', 'commits', 'tasks', 'uptime'];
+      labels.forEach((label, i) => {
+        const span = label.querySelector('.stat-value');
+        if (span && stats[values[i]]) {
+          span.textContent = stats[values[i]];
+        }
+      });
+    }
+    
+    function updateDomains(levels) {
+      levels.forEach((level, i) => {
+        const fill = document.getElementById(`domain${i + 1}`);
+        const levelEl = document.getElementById(`domainLevel${i + 1}`);
+        if (fill) fill.style.height = `${level}%`;
+        if (levelEl) levelEl.textContent = level;
+      });
+    }
+  </script>
+</body>
+</html>
