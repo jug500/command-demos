@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COMMAND CENTER - Twitch Dashboard Style</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0e0e10;
+      min-height: 100vh;
+      color: white;
+    }
+    
+    .header {
+      background: #18181b;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #2f2f35;
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: #9147ff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #9147ff, #772ce8);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .header-nav {
+      display: flex;
+      gap: 30px;
+    }
+    
+    .nav-item {
+      font-size: 14px;
+      font-weight: 600;
+      color: #adadb8;
+      cursor: pointer;
+      padding: 8px 0;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+    
+    .nav-item:hover { color: #efeff1; }
+    .nav-item.active { color: #9147ff; border-bottom-color: #9147ff; }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .header-search {
+      background: #3f3f46;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      color: white;
+      width: 300px;
+      font-size: 14px;
+    }
+    
+    .header-search::placeholder { color: #adadb8; }
+    
+    .header-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .header-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #9147ff, #772ce8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    
+    .main-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr 320px;
+      min-height: calc(100vh - 60px);
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      background: #1f1f23;
+      padding: 20px 10px;
+    }
+    
+    .sidebar-section {
+      margin-bottom: 20px;
+    }
+    
+    .sidebar-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #adadb8;
+      padding: 0 10px;
+      margin-bottom: 10px;
+    }
+    
+    .channel-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    
+    .channel-item:hover { background: #2f2f35; }
+    .channel-item.active { background: #9147ff20; }
+    
+    .channel-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    
+    .channel-info {
+      flex: 1;
+    }
+    
+    .channel-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .channel-status {
+      font-size: 12px;
+      color: #adadb8;
+    }
+    
+    .channel-live {
+      background: #eb0400;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    
+    .channel-viewers {
+      font-size: 12px;
+      color: #adadb8;
+    }
+    
+    /* Main Content */
+    .main-content {
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .stream-preview {
+      background: #18181b;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    
+    .stream-video {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #1f1f23, #0e0e10);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .stream-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.8) 100%);
+    }
+    
+    .stream-info {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+    }
+    
+    .stream-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .stream-meta {
+      display: flex;
+      gap: 15px;
+      font-size: 14px;
+      color: #adadb8;
+    }
+    
+    .stream-tag {
+      background: #2f2f35;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .stream-controls {
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #2f2f35;
+    }
+    
+    .control-btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .control-btn.primary {
+      background: #9147ff;
+      color: white;
+    }
+    
+    .control-btn.primary:hover { background: #772ce8; }
+    
+    .control-btn.secondary {
+      background: #2f2f35;
+      color: white;
+    }
+    
+    .control-btn.secondary:hover { background: #3f3f46; }
+    
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .stat-card {
+      background: #18181b;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    
+    .stat-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: #efeff1;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: #adadb8;
+      margin-top: 5px;
+    }
+    
+    .stat-change {
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    
+    .stat-change.positive { color: #00f593; }
+    .stat-change.negative { color: #eb0400; }
+    
+    /* Tasks Feed */
+    .tasks-section {
+      background: #18181b;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .tasks-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      border-bottom: 1px solid #2f2f35;
+    }
+    
+    .tasks-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+    
+    .tasks-tabs {
+      display: flex;
+      gap: 5px;
+    }
+    
+    .tasks-tab {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      background: transparent;
+      border: none;
+      color: #adadb8;
+      cursor: pointer;
+    }
+    
+    .tasks-tab:hover { background: #2f2f35; color: #efeff1; }
+    .tasks-tab.active { background: #9147ff; color: white; }
+    
+    .tasks-list {
+      padding: 10px;
+    }
+    
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    
+    .task-item:hover { background: #2f2f35; }
+    
+    .task-priority {
+      width: 4px;
+      height: 40px;
+      border-radius: 2px;
+    }
+    
+    .task-priority.urgent { background: #eb0400; }
+    .task-priority.high { background: #ffb31a; }
+    .task-priority.normal { background: #00f593; }
+    
+    .task-content { flex: 1; }
+    
+    .task-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .task-meta {
+      font-size: 12px;
+      color: #adadb8;
+    }
+    
+    .task-assignee {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+    }
+    
+    .task-progress {
+      width: 60px;
+      text-align: right;
+    }
+    
+    .task-progress-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: #9147ff;
+    }
+    
+    /* Chat Panel */
+    .chat-panel {
+      background: #18181b;
+      border-left: 1px solid #2f2f35;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .chat-header {
+      padding: 15px 20px;
+      border-bottom: 1px solid #2f2f35;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .chat-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    
+    .chat-settings {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .chat-setting-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      background: #2f2f35;
+      border: none;
+      color: #adadb8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .chat-setting-btn:hover { background: #3f3f46; color: white; }
+    
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+    }
+    
+    .chat-message {
+      margin-bottom: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    
+    .chat-message-author {
+      font-weight: 700;
+      cursor: pointer;
+    }
+    
+    .chat-message-author.carlos { color: #ffb31a; }
+    .chat-message-author.jug { color: #9147ff; }
+    .chat-message-author.jarvis { color: #00f593; }
+    .chat-message-author.barvis { color: #ff6b6b; }
+    .chat-message-author.system { color: #adadb8; }
+    
+    .chat-message-time {
+      font-size: 11px;
+      color: #adadb8;
+      margin-left: 8px;
+    }
+    
+    .chat-message-text {
+      color: #efeff1;
+    }
+    
+    .chat-message.system {
+      background: #9147ff20;
+      padding: 10px;
+      border-radius: 6px;
+      border-left: 3px solid #9147ff;
+    }
+    
+    .chat-input-area {
+      padding: 15px;
+      border-top: 1px solid #2f2f35;
+    }
+    
+    .chat-input-wrapper {
+      background: #2f2f35;
+      border-radius: 6px;
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .chat-input {
+      flex: 1;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 14px;
+      outline: none;
+    }
+    
+    .chat-input::placeholder { color: #adadb8; }
+    
+    .chat-send {
+      padding: 6px 12px;
+      background: #9147ff;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    
+    .chat-send:hover { background: #772ce8; }
+    
+    /* Alert Banner */
+    .alert-banner {
+      background: linear-gradient(90deg, #9147ff, #772ce8);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .alert-icon { font-size: 20px; }
+    
+    .alert-btn {
+      background: white;
+      color: #9147ff;
+      border: none;
+      padding: 6px 16px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Alert Banner -->
+  <div class="alert-banner">
+    <span class="alert-icon">🔥</span>
+    <span>"The Lost City of Gold" script is ready for final review!</span>
+    <button class="alert-btn">View Now</button>
+  </div>
+  
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      COMMAND CENTER
+    </div>
+    <nav class="header-nav">
+      <div class="nav-item active">Dashboard</div>
+      <div class="nav-item">Projects</div>
+      <div class="nav-item">Analytics</div>
+      <div class="nav-item">Scripts</div>
+      <div class="nav-item">AI Chat</div>
+    </nav>
+    <div class="header-right">
+      <input type="text" class="header-search" placeholder="Search projects, tasks...">
+      <div class="header-user">
+        <div class="header-avatar">C</div>
+      </div>
+    </div>
+  </header>
+  
+  <main class="main-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Your Channels</div>
+        <div class="channel-item active">
+          <div class="channel-avatar" style="background: linear-gradient(135deg, #ffb31a, #ff6b6b);">H</div>
+          <div class="channel-info">
+            <div class="channel-name">History</div>
+            <div class="channel-status">Script in progress</div>
+          </div>
+        </div>
+        <div class="channel-item">
+          <div class="channel-avatar" style="background: linear-gradient(135deg, #eb0400, #ff6b6b);">D</div>
+          <div class="channel-info">
+            <div class="channel-name">Drama</div>
+            <div class="channel-status">Ready to upload</div>
+          </div>
+          <span class="channel-live">LIVE</span>
+        </div>
+        <div class="channel-item">
+          <div class="channel-avatar" style="background: linear-gradient(135deg, #00f593, #00b4d8);">T</div>
+          <div class="channel-info">
+            <div class="channel-name">Tech</div>
+            <div class="channel-status">Research phase</div>
+          </div>
+        </div>
+        <div class="channel-item">
+          <div class="channel-avatar" style="background: linear-gradient(135deg, #9147ff, #772ce8);">R</div>
+          <div class="channel-info">
+            <div class="channel-name">Roof Report</div>
+            <div class="channel-status">10 videos queued</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="sidebar-section">
+        <div class="sidebar-title">AI Operators</div>
+        <div class="channel-item">
+          <div class="channel-avatar" style="background: linear-gradient(135deg, #00f593, #1abc9c);">J</div>
+          <div class="channel-info">
+            <div class="channel-name">Jarvis</div>
+            <div class="channel-status">Cooking 🔥</div>
+          </div>
+          <span class="channel-viewers">Online</span>
+        </div>
+        <div class="channel-item">
+          <div class="channel-avatar" style="background: linear-gradient(135deg, #ff6b6b, #eb459e);">B</div>
+          <div class="channel-info">
+            <div class="channel-name">Barvis</div>
+            <div class="channel-status">Building UI demos</div>
+          </div>
+          <span class="channel-viewers">Online</span>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <section class="main-content">
+      <!-- Stream Preview -->
+      <div class="stream-preview">
+        <div class="stream-video">
+          <div class="stream-overlay"></div>
+          <div style="font-size: 48px;">📺</div>
+          <div class="stream-info">
+            <div class="stream-title">Empire Control Room</div>
+            <div class="stream-meta">
+              <span>Continental Media Network</span>
+              <span>•</span>
+              <span>8 Active Channels</span>
+              <span class="stream-tag">💰 $56K/mo</span>
+              <span class="stream-tag">👁 127K views/week</span>
+            </div>
+          </div>
+        </div>
+        <div class="stream-controls">
+          <div style="display: flex; gap: 10px;">
+            <button class="control-btn primary">🚀 New Project</button>
+            <button class="control-btn secondary">📊 Analytics</button>
+            <button class="control-btn secondary">💬 AI Chat</button>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="control-btn secondary">⚙️</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">👁</div>
+          <div class="stat-value">127.4K</div>
+          <div class="stat-label">Views (7 days)</div>
+          <div class="stat-change positive">↑ 12.3%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-value">$2,847</div>
+          <div class="stat-label">Revenue (MTD)</div>
+          <div class="stat-change positive">↑ 8.1%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-value">15.2K</div>
+          <div class="stat-label">Subscribers</div>
+          <div class="stat-change positive">↑ 234</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⏱</div>
+          <div class="stat-value">4.2K</div>
+          <div class="stat-label">Watch Hours</div>
+          <div class="stat-change negative">↓ 2.1%</div>
+        </div>
+      </div>
+      
+      <!-- Tasks -->
+      <div class="tasks-section">
+        <div class="tasks-header">
+          <div class="tasks-title">Active Tasks</div>
+          <div class="tasks-tabs">
+            <button class="tasks-tab active">All</button>
+            <button class="tasks-tab">Urgent</button>
+            <button class="tasks-tab">In Progress</button>
+            <button class="tasks-tab">Completed</button>
+          </div>
+        </div>
+        <div class="tasks-list">
+          <div class="task-item">
+            <div class="task-priority urgent"></div>
+            <div class="task-content">
+              <div class="task-title">The Lost City of Gold - Final Review</div>
+              <div class="task-meta">History Channel • Due in 2 hours</div>
+            </div>
+            <div class="task-assignee" style="background: linear-gradient(135deg, #00f593, #1abc9c);">J</div>
+            <div class="task-progress">
+              <div class="task-progress-value">85%</div>
+            </div>
+          </div>
+          <div class="task-item">
+            <div class="task-priority high"></div>
+            <div class="task-content">
+              <div class="task-title">MrBeast vs Logan Paul - Thumbnail A/B</div>
+              <div class="task-meta">Drama Channel • Due tomorrow</div>
+            </div>
+            <div class="task-assignee" style="background: linear-gradient(135deg, #ff6b6b, #eb459e);">B</div>
+            <div class="task-progress">
+              <div class="task-progress-value">100%</div>
+            </div>
+          </div>
+          <div class="task-item">
+            <div class="task-priority normal"></div>
+            <div class="task-content">
+              <div class="task-title">AI Revolution 2025 - Research</div>
+              <div class="task-meta">Tech Channel • Due in 3 days</div>
+            </div>
+            <div class="task-assignee" style="background: linear-gradient(135deg, #ff6b6b, #eb459e);">B</div>
+            <div class="task-progress">
+              <div class="task-progress-value">45%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Chat Panel -->
+    <aside class="chat-panel">
+      <div class="chat-header">
+        <div class="chat-title">Team Chat</div>
+        <div class="chat-settings">
+          <button class="chat-setting-btn">👥</button>
+          <button class="chat-setting-btn">⚙️</button>
+        </div>
+      </div>
+      
+      <div class="chat-messages">
+        <div class="chat-message system">
+          <span class="chat-message-text">🔔 <strong>Jarvis</strong> completed "Lost City of Gold" script draft</span>
+        </div>
+        
+        <div class="chat-message">
+          <span class="chat-message-author carlos">Carlos</span>
+          <span class="chat-message-time">6:45 PM</span>
+          <div class="chat-message-text">bet. push that script when ready. also need thumbnails for next week's batch</div>
+        </div>
+        
+        <div class="chat-message">
+          <span class="chat-message-author jug">Jug</span>
+          <span class="chat-message-time">6:48 PM</span>
+          <div class="chat-message-text">faceless channels doing numbers rn. roof report hit 50k on the last vid 📈</div>
+        </div>
+        
+        <div class="chat-message">
+          <span class="chat-message-author jarvis">Jarvis</span>
+          <span class="chat-message-time">6:50 PM</span>
+          <div class="chat-message-text">W secured 🔥 That's a +34% increase from the previous upload. The hook optimization is paying off.</div>
+        </div>
+        
+        <div class="chat-message">
+          <span class="chat-message-author barvis">Barvis</span>
+          <span class="chat-message-time">6:52 PM</span>
+          <div class="chat-message-text">Building the UI demos now. GTA and Warzone styles cooking 👨‍🍳</div>
+        </div>
+        
+        <div class="chat-message">
+          <span class="chat-message-author carlos">Carlos</span>
+          <span class="chat-message-time">6:55 PM</span>
+          <div class="chat-message-text">lowkey fire. innovate. try something new.</div>
+        </div>
+        
+        <div class="chat-message">
+          <span class="chat-message-author barvis">Barvis</span>
+          <span class="chat-message-time">6:58 PM</span>
+          <div class="chat-message-text">Say less. 5 unhinged demos incoming 🔥</div>
+        </div>
+      </div>
+      
+      <div class="chat-input-area">
+        <div class="chat-input-wrapper">
+          <input type="text" class="chat-input" placeholder="Send a message...">
+          <button class="chat-send">Chat</button>
+        </div>
+      </div>
+    </aside>
+  </main>
+</body>
+</html>

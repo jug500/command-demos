@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COMMAND CENTER - 2K MyCareer Style</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 50%, #0f0f0f 100%);
+      min-height: 100vh;
+      color: white;
+      overflow-x: hidden;
+    }
+    
+    .bg-pattern {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(255,215,0,0.1) 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(255,215,0,0.05) 0%, transparent 40%);
+      z-index: -1;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background: rgba(0,0,0,0.5);
+      border-bottom: 2px solid rgba(255,215,0,0.3);
+    }
+    
+    .logo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: #ffd700;
+      text-shadow: 0 0 20px rgba(255,215,0,0.5);
+    }
+    
+    .header-stats {
+      display: flex;
+      gap: 40px;
+    }
+    
+    .header-stat {
+      text-align: center;
+    }
+    
+    .header-stat-value {
+      font-family: 'Oswald', sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: #ffd700;
+    }
+    
+    .header-stat-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.5);
+    }
+    
+    .main-grid {
+      display: grid;
+      grid-template-columns: 350px 1fr 320px;
+      gap: 30px;
+      padding: 30px 40px;
+      min-height: calc(100vh - 100px);
+    }
+    
+    /* Player Card */
+    .player-card {
+      background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+      border: 2px solid rgba(255,215,0,0.3);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    
+    .card-header {
+      background: linear-gradient(135deg, #ffd700, #ff8c00);
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .card-rating {
+      font-family: 'Oswald', sans-serif;
+      font-size: 72px;
+      font-weight: 700;
+      color: black;
+      text-shadow: 2px 2px 0 rgba(255,255,255,0.3);
+    }
+    
+    .card-overall {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: rgba(0,0,0,0.7);
+    }
+    
+    .card-avatar {
+      width: 150px;
+      height: 150px;
+      margin: -50px auto 20px;
+      background: linear-gradient(135deg, #ffd700, #ff8c00);
+      border-radius: 50%;
+      border: 5px solid #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Oswald', sans-serif;
+      font-size: 60px;
+      font-weight: 700;
+      color: black;
+    }
+    
+    .card-name {
+      text-align: center;
+      font-family: 'Oswald', sans-serif;
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+    }
+    
+    .card-title {
+      text-align: center;
+      font-size: 14px;
+      color: #ffd700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+    
+    .card-stats {
+      padding: 0 20px 20px;
+    }
+    
+    .stat-bar {
+      margin-bottom: 15px;
+    }
+    
+    .stat-bar-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    
+    .stat-bar-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,0.6);
+    }
+    
+    .stat-bar-value {
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      color: #ffd700;
+    }
+    
+    .stat-bar-track {
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .stat-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ffd700, #ff8c00);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+    
+    .card-badges {
+      padding: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .badges-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+      color: rgba(255,255,255,0.7);
+    }
+    
+    .badges-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    
+    .badge {
+      width: 50px;
+      height: 50px;
+      background: rgba(255,215,0,0.1);
+      border: 2px solid rgba(255,215,0,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .badge:hover {
+      background: rgba(255,215,0,0.2);
+      transform: scale(1.1);
+    }
+    
+    .badge.gold { border-color: #ffd700; background: rgba(255,215,0,0.3); }
+    .badge.silver { border-color: #c0c0c0; background: rgba(192,192,192,0.2); }
+    .badge.bronze { border-color: #cd7f32; background: rgba(205,127,50,0.2); }
+    
+    /* Main Content */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .content-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .content-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      color: #ffd700;
+    }
+    
+    .content-tabs {
+      display: flex;
+      gap: 5px;
+    }
+    
+    .content-tab {
+      padding: 10px 20px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 14px;
+      letter-spacing: 2px;
+      background: transparent;
+      border: 2px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .content-tab:hover { border-color: rgba(255,255,255,0.4); color: white; }
+    .content-tab.active { background: #ffd700; border-color: #ffd700; color: black; }
+    
+    /* Mission Cards */
+    .missions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    
+    .mission-card {
+      background: linear-gradient(145deg, rgba(30,30,30,0.9), rgba(15,15,15,0.9));
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: 15px;
+      padding: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .mission-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #ffd700, #ff8c00);
+    }
+    
+    .mission-card:hover {
+      border-color: rgba(255,215,0,0.4);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(255,215,0,0.15);
+    }
+    
+    .mission-difficulty {
+      display: inline-block;
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+    
+    .difficulty-legend { background: #ffd700; color: black; }
+    .difficulty-epic { background: #9b59b6; color: white; }
+    .difficulty-rare { background: #3498db; color: white; }
+    .difficulty-common { background: #2ecc71; color: white; }
+    
+    .mission-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    
+    .mission-desc {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    
+    .mission-rewards {
+      display: flex;
+      gap: 20px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .reward {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .reward-icon { font-size: 20px; }
+    
+    .reward-value {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      color: #ffd700;
+    }
+    
+    .reward-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+    }
+    
+    /* Season Pass */
+    .season-panel {
+      background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+      border: 2px solid rgba(255,215,0,0.3);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    
+    .season-header {
+      background: linear-gradient(90deg, rgba(255,215,0,0.2), transparent);
+      padding: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .season-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: #ffd700;
+    }
+    
+    .season-subtitle {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .season-progress {
+      padding: 20px;
+    }
+    
+    .season-level {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .season-level-num {
+      font-family: 'Oswald', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: #ffd700;
+    }
+    
+    .season-level-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    
+    .season-xp {
+      text-align: right;
+    }
+    
+    .season-xp-value {
+      font-family: 'Oswald', sans-serif;
+      font-size: 24px;
+      color: white;
+    }
+    
+    .season-xp-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+    }
+    
+    .season-bar {
+      height: 12px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    
+    .season-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ffd700, #ff8c00);
+      border-radius: 6px;
+      transition: width 0.5s ease;
+    }
+    
+    .season-rewards {
+      padding: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .rewards-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 16px;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+      color: rgba(255,255,255,0.6);
+    }
+    
+    .rewards-track {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+    
+    .reward-item {
+      width: 60px;
+      flex-shrink: 0;
+      text-align: center;
+    }
+    
+    .reward-item-box {
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,0.05);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .reward-item-box:hover {
+      border-color: #ffd700;
+      background: rgba(255,215,0,0.1);
+    }
+    
+    .reward-item-box.claimed {
+      background: rgba(255,215,0,0.2);
+      border-color: #ffd700;
+    }
+    
+    .reward-item-box.locked {
+      opacity: 0.4;
+    }
+    
+    .reward-item-level {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+    }
+    
+    /* Leaderboard */
+    .leaderboard {
+      padding: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .leaderboard-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+      color: rgba(255,255,255,0.7);
+    }
+    
+    .leaderboard-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    
+    .leaderboard-item.gold { background: rgba(255,215,0,0.1); }
+    
+    .leaderboard-rank {
+      font-family: 'Oswald', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      width: 30px;
+      color: rgba(255,255,255,0.5);
+    }
+    
+    .leaderboard-item.gold .leaderboard-rank { color: #ffd700; }
+    
+    .leaderboard-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+    
+    .leaderboard-name {
+      flex: 1;
+      font-weight: 500;
+    }
+    
+    .leaderboard-score {
+      font-family: 'Oswald', sans-serif;
+      font-size: 18px;
+      color: #ffd700;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-pattern"></div>
+  
+  <header class="header">
+    <div class="logo">MY CAREER</div>
+    <div class="header-stats">
+      <div class="header-stat">
+        <div class="header-stat-value">$847K</div>
+        <div class="header-stat-label">Total Earnings</div>
+      </div>
+      <div class="header-stat">
+        <div class="header-stat-value">347</div>
+        <div class="header-stat-label">Videos Shipped</div>
+      </div>
+      <div class="header-stat">
+        <div class="header-stat-value">8</div>
+        <div class="header-stat-label">Active Channels</div>
+      </div>
+    </div>
+  </header>
+  
+  <main class="main-grid">
+    <!-- Player Card -->
+    <aside class="player-card">
+      <div class="card-header">
+        <div class="card-rating">94</div>
+        <div class="card-overall">OVERALL</div>
+      </div>
+      <div class="card-avatar">C</div>
+      <div class="card-name">CARLOS</div>
+      <div class="card-title">Content King 👑</div>
+      
+      <div class="card-stats">
+        <div class="stat-bar">
+          <div class="stat-bar-header">
+            <span class="stat-bar-label">Scripting</span>
+            <span class="stat-bar-value">92</span>
+          </div>
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill" style="width: 92%;"></div>
+          </div>
+        </div>
+        <div class="stat-bar">
+          <div class="stat-bar-header">
+            <span class="stat-bar-label">Thumbnails</span>
+            <span class="stat-bar-value">88</span>
+          </div>
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill" style="width: 88%;"></div>
+          </div>
+        </div>
+        <div class="stat-bar">
+          <div class="stat-bar-header">
+            <span class="stat-bar-label">Strategy</span>
+            <span class="stat-bar-value">95</span>
+          </div>
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill" style="width: 95%;"></div>
+          </div>
+        </div>
+        <div class="stat-bar">
+          <div class="stat-bar-header">
+            <span class="stat-bar-label">Execution</span>
+            <span class="stat-bar-value">90</span>
+          </div>
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill" style="width: 90%;"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card-badges">
+        <div class="badges-title">BADGES</div>
+        <div class="badges-grid">
+          <div class="badge gold">🔥</div>
+          <div class="badge gold">💎</div>
+          <div class="badge gold">🚀</div>
+          <div class="badge silver">📈</div>
+          <div class="badge silver">🎯</div>
+          <div class="badge bronze">⚡</div>
+          <div class="badge bronze">💰</div>
+          <div class="badge">🔒</div>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <section class="main-content">
+      <div class="content-header">
+        <div class="content-title">ACTIVE MISSIONS</div>
+        <div class="content-tabs">
+          <button class="content-tab active">ALL</button>
+          <button class="content-tab">DAILY</button>
+          <button class="content-tab">WEEKLY</button>
+        </div>
+      </div>
+      
+      <div class="missions-grid">
+        <div class="mission-card">
+          <span class="mission-difficulty difficulty-legend">LEGENDARY</span>
+          <div class="mission-title">THE LOST CITY OF GOLD</div>
+          <div class="mission-desc">Complete the history channel script with 90%+ retention rate prediction.</div>
+          <div class="mission-rewards">
+            <div class="reward">
+              <span class="reward-icon">💰</span>
+              <div>
+                <div class="reward-value">$2,400</div>
+                <div class="reward-label">Cash</div>
+              </div>
+            </div>
+            <div class="reward">
+              <span class="reward-icon">⭐</span>
+              <div>
+                <div class="reward-value">500</div>
+                <div class="reward-label">XP</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mission-card">
+          <span class="mission-difficulty difficulty-epic">EPIC</span>
+          <div class="mission-title">MRBEAST VS LOGAN PAUL</div>
+          <div class="mission-desc">Ship the drama video with optimized thumbnail A/B test.</div>
+          <div class="mission-rewards">
+            <div class="reward">
+              <span class="reward-icon">💰</span>
+              <div>
+                <div class="reward-value">$1,800</div>
+                <div class="reward-label">Cash</div>
+              </div>
+            </div>
+            <div class="reward">
+              <span class="reward-icon">⭐</span>
+              <div>
+                <div class="reward-value">350</div>
+                <div class="reward-label">XP</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mission-card">
+          <span class="mission-difficulty difficulty-rare">RARE</span>
+          <div class="mission-title">AI REVOLUTION 2025</div>
+          <div class="mission-desc">Research and outline the tech channel video on AI developments.</div>
+          <div class="mission-rewards">
+            <div class="reward">
+              <span class="reward-icon">💰</span>
+              <div>
+                <div class="reward-value">$1,200</div>
+                <div class="reward-label">Cash</div>
+              </div>
+            </div>
+            <div class="reward">
+              <span class="reward-icon">⭐</span>
+              <div>
+                <div class="reward-value">250</div>
+                <div class="reward-label">XP</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mission-card">
+          <span class="mission-difficulty difficulty-common">COMMON</span>
+          <div class="mission-title">THUMBNAIL BATCH</div>
+          <div class="mission-desc">Create 10 thumbnails for next week's Roof Report uploads.</div>
+          <div class="mission-rewards">
+            <div class="reward">
+              <span class="reward-icon">💰</span>
+              <div>
+                <div class="reward-value">$800</div>
+                <div class="reward-label">Cash</div>
+              </div>
+            </div>
+            <div class="reward">
+              <span class="reward-icon">⭐</span>
+              <div>
+                <div class="reward-value">150</div>
+                <div class="reward-label">XP</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Season Pass -->
+    <aside class="season-panel">
+      <div class="season-header">
+        <div class="season-title">SEASON 4</div>
+        <div class="season-subtitle">Content Empire</div>
+      </div>
+      
+      <div class="season-progress">
+        <div class="season-level">
+          <div>
+            <div class="season-level-num">47</div>
+            <div class="season-level-label">Level</div>
+          </div>
+          <div class="season-xp">
+            <div class="season-xp-value">12,450 / 15,000</div>
+            <div class="season-xp-label">XP to next level</div>
+          </div>
+        </div>
+        <div class="season-bar">
+          <div class="season-bar-fill" style="width: 83%;"></div>
+        </div>
+      </div>
+      
+      <div class="season-rewards">
+        <div class="rewards-title">REWARD TRACK</div>
+        <div class="rewards-track">
+          <div class="reward-item">
+            <div class="reward-item-box claimed">💎</div>
+            <div class="reward-item-level">LVL 45</div>
+          </div>
+          <div class="reward-item">
+            <div class="reward-item-box claimed">🎨</div>
+            <div class="reward-item-level">LVL 46</div>
+          </div>
+          <div class="reward-item">
+            <div class="reward-item-box">🔥</div>
+            <div class="reward-item-level">LVL 47</div>
+          </div>
+          <div class="reward-item">
+            <div class="reward-item-box locked">👑</div>
+            <div class="reward-item-level">LVL 48</div>
+          </div>
+          <div class="reward-item">
+            <div class="reward-item-box locked">💰</div>
+            <div class="reward-item-level">LVL 49</div>
+          </div>
+          <div class="reward-item">
+            <div class="reward-item-box locked">🏆</div>
+            <div class="reward-item-level">LVL 50</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="leaderboard">
+        <div class="leaderboard-title">CREW LEADERBOARD</div>
+        <div class="leaderboard-item gold">
+          <div class="leaderboard-rank">1</div>
+          <div class="leaderboard-avatar" style="background: linear-gradient(135deg, #ffd700, #ff8c00);">C</div>
+          <div class="leaderboard-name">Carlos</div>
+          <div class="leaderboard-score">94</div>
+        </div>
+        <div class="leaderboard-item">
+          <div class="leaderboard-rank">2</div>
+          <div class="leaderboard-avatar" style="background: linear-gradient(135deg, #5865f2, #9b59b6);">J</div>
+          <div class="leaderboard-name">Jug</div>
+          <div class="leaderboard-score">91</div>
+        </div>
+        <div class="leaderboard-item">
+          <div class="leaderboard-rank">3</div>
+          <div class="leaderboard-avatar" style="background: linear-gradient(135deg, #23a559, #1abc9c);">J</div>
+          <div class="leaderboard-name">Jarvis</div>
+          <div class="leaderboard-score">89</div>
+        </div>
+        <div class="leaderboard-item">
+          <div class="leaderboard-rank">4</div>
+          <div class="leaderboard-avatar" style="background: linear-gradient(135deg, #f23f43, #eb459e);">B</div>
+          <div class="leaderboard-name">Barvis</div>
+          <div class="leaderboard-score">87</div>
+        </div>
+      </div>
+    </aside>
+  </main>
+</body>
+</html>

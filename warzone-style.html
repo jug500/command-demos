@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COMMAND CENTER - Warzone Style</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: #0d0d0d;
+      min-height: 100vh;
+      color: white;
+      overflow-x: hidden;
+    }
+    
+    .warzone-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(ellipse at top, rgba(255,152,0,0.1) 0%, transparent 50%),
+        linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+      z-index: -1;
+    }
+    
+    .scan-line {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: rgba(255,152,0,0.5);
+      animation: scanLine 3s linear infinite;
+      z-index: 100;
+      pointer-events: none;
+    }
+    
+    @keyframes scanLine {
+      0% { top: 0; opacity: 1; }
+      100% { top: 100vh; opacity: 0; }
+    }
+    
+    .header {
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,152,0,0.3);
+      background: rgba(0,0,0,0.5);
+    }
+    
+    .logo {
+      font-family: 'Teko', sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: 8px;
+      color: #ff9800;
+      text-shadow: 0 0 20px rgba(255,152,0,0.5);
+    }
+    
+    .player-stats {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+    
+    .stat-block {
+      text-align: center;
+    }
+    
+    .stat-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.4);
+    }
+    
+    .stat-value {
+      font-family: 'Teko', sans-serif;
+      font-size: 32px;
+      font-weight: 600;
+      color: #ff9800;
+    }
+    
+    .main-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr 280px;
+      gap: 0;
+      min-height: calc(100vh - 90px);
+    }
+    
+    /* Operator Select */
+    .operator-panel {
+      background: rgba(20,20,20,0.9);
+      border-right: 1px solid rgba(255,152,0,0.2);
+      padding: 30px 20px;
+    }
+    
+    .panel-header {
+      font-family: 'Teko', sans-serif;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      color: #ff9800;
+      margin-bottom: 25px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ff9800;
+    }
+    
+    .operator-card {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      margin-bottom: 10px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .operator-card:hover {
+      background: rgba(255,152,0,0.1);
+      border-color: rgba(255,152,0,0.3);
+    }
+    
+    .operator-card.selected {
+      background: rgba(255,152,0,0.15);
+      border-color: #ff9800;
+      border-left: 4px solid #ff9800;
+    }
+    
+    .operator-avatar {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #ff9800, #f57c00);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Teko', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    
+    .operator-info h3 {
+      font-family: 'Teko', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+    
+    .operator-info p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .operator-status {
+      margin-left: auto;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #4caf50;
+      box-shadow: 0 0 10px #4caf50;
+    }
+    
+    .operator-status.busy { background: #ff9800; box-shadow: 0 0 10px #ff9800; }
+    .operator-status.offline { background: #666; box-shadow: none; }
+    
+    /* Main Content */
+    .main-content {
+      padding: 30px 40px;
+      background: rgba(15,15,15,0.9);
+    }
+    
+    .content-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 30px;
+    }
+    
+    .content-tab {
+      padding: 15px 30px;
+      font-family: 'Teko', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.4);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+    }
+    
+    .content-tab:hover { color: rgba(255,255,255,0.7); }
+    .content-tab.active {
+      color: #ff9800;
+      border-bottom-color: #ff9800;
+      background: rgba(255,152,0,0.05);
+    }
+    
+    /* Loadout Cards */
+    .loadout-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    
+    .loadout-card {
+      background: linear-gradient(135deg, rgba(30,30,30,0.9), rgba(20,20,20,0.9));
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .loadout-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #ff9800, #f44336);
+    }
+    
+    .loadout-card:hover {
+      border-color: rgba(255,152,0,0.3);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(255,152,0,0.1);
+    }
+    
+    .loadout-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+    
+    .loadout-type {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.3);
+    }
+    
+    .loadout-priority {
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .priority-critical { background: #f44336; color: white; }
+    .priority-high { background: #ff9800; color: black; }
+    .priority-normal { background: #4caf50; color: white; }
+    
+    .loadout-name {
+      font-family: 'Teko', sans-serif;
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+    
+    .loadout-desc {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    
+    .loadout-stats {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .loadout-stat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+    }
+    
+    .loadout-stat span { color: #ff9800; font-weight: 600; }
+    
+    .loadout-progress {
+      margin-top: 15px;
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      position: relative;
+    }
+    
+    .loadout-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff9800, #f44336);
+      transition: width 0.5s ease;
+    }
+    
+    /* Intel Panel */
+    .intel-panel {
+      background: rgba(20,20,20,0.9);
+      border-left: 1px solid rgba(255,152,0,0.2);
+      padding: 30px 20px;
+    }
+    
+    .intel-card {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 20px;
+      margin-bottom: 15px;
+    }
+    
+    .intel-title {
+      font-family: 'Teko', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: #ff9800;
+      margin-bottom: 15px;
+    }
+    
+    .intel-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .intel-row:last-child { border: none; }
+    
+    .intel-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .intel-value {
+      font-family: 'Teko', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: white;
+    }
+    
+    .intel-value.positive { color: #4caf50; }
+    .intel-value.negative { color: #f44336; }
+    
+    /* Live Feed */
+    .live-feed {
+      margin-top: 20px;
+    }
+    
+    .feed-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 13px;
+    }
+    
+    .feed-time {
+      color: rgba(255,255,255,0.3);
+      font-family: monospace;
+      font-size: 11px;
+    }
+    
+    .feed-text {
+      color: rgba(255,255,255,0.7);
+    }
+    
+    .feed-text strong { color: #ff9800; }
+    
+    /* Action Button */
+    .deploy-btn {
+      width: 100%;
+      padding: 18px;
+      margin-top: 20px;
+      font-family: 'Teko', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      background: linear-gradient(90deg, #ff9800, #f57c00);
+      border: none;
+      color: black;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .deploy-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 30px rgba(255,152,0,0.5);
+    }
+    
+    /* Footer HUD */
+    .footer-hud {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 15px 40px;
+      background: rgba(0,0,0,0.8);
+      border-top: 1px solid rgba(255,152,0,0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .hud-left {
+      display: flex;
+      gap: 30px;
+    }
+    
+    .hud-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .hud-key {
+      padding: 5px 12px;
+      background: rgba(255,152,0,0.2);
+      border: 1px solid rgba(255,152,0,0.4);
+      font-family: 'Teko', sans-serif;
+      font-size: 16px;
+      color: #ff9800;
+    }
+    
+    .hud-label {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .hud-right {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    
+    .hud-right span { color: #ff9800; }
+  </style>
+</head>
+<body>
+  <div class="warzone-bg"></div>
+  <div class="scan-line"></div>
+  
+  <header class="header">
+    <div class="logo">COMMAND CENTER</div>
+    <div class="player-stats">
+      <div class="stat-block">
+        <div class="stat-label">Rank</div>
+        <div class="stat-value">PRESTIGE 3</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-label">K/D Ratio</div>
+        <div class="stat-value">2.47</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-label">Revenue</div>
+        <div class="stat-value">$847K</div>
+      </div>
+    </div>
+  </header>
+  
+  <main class="main-grid">
+    <!-- Operator Panel -->
+    <aside class="operator-panel">
+      <h2 class="panel-header">// OPERATORS</h2>
+      
+      <div class="operator-card selected">
+        <div class="operator-avatar">C</div>
+        <div class="operator-info">
+          <h3>CARLOS</h3>
+          <p>Commander</p>
+        </div>
+        <div class="operator-status"></div>
+      </div>
+      
+      <div class="operator-card">
+        <div class="operator-avatar" style="background: linear-gradient(135deg, #9c27b0, #673ab7);">J</div>
+        <div class="operator-info">
+          <h3>JUG</h3>
+          <p>Operations</p>
+        </div>
+        <div class="operator-status"></div>
+      </div>
+      
+      <div class="operator-card">
+        <div class="operator-avatar" style="background: linear-gradient(135deg, #4caf50, #2e7d32);">J</div>
+        <div class="operator-info">
+          <h3>JARVIS</h3>
+          <p>AI Support</p>
+        </div>
+        <div class="operator-status busy"></div>
+      </div>
+      
+      <div class="operator-card">
+        <div class="operator-avatar" style="background: linear-gradient(135deg, #2196f3, #1565c0);">B</div>
+        <div class="operator-info">
+          <h3>BARVIS</h3>
+          <p>AI Support</p>
+        </div>
+        <div class="operator-status busy"></div>
+      </div>
+      
+      <div style="margin-top: 30px;">
+        <h2 class="panel-header">// COMMS</h2>
+        <div style="background: rgba(0,0,0,0.3); padding: 15px; border: 1px solid rgba(255,152,0,0.2);">
+          <div style="font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 10px;">Last Message:</div>
+          <div style="font-size: 14px; color: white;">"Jarvis is doing nerd shit again..."</div>
+          <div style="font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 8px;">— Carlos, 2 min ago</div>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <section class="main-content">
+      <div class="content-tabs">
+        <button class="content-tab active">LOADOUTS</button>
+        <button class="content-tab">CONTRACTS</button>
+        <button class="content-tab">INTEL</button>
+        <button class="content-tab">ARMORY</button>
+      </div>
+      
+      <div class="loadout-grid">
+        <div class="loadout-card">
+          <div class="loadout-header">
+            <div class="loadout-type">Script // Priority Mission</div>
+            <div class="loadout-priority priority-critical">CRITICAL</div>
+          </div>
+          <div class="loadout-name">THE LOST CITY OF GOLD</div>
+          <div class="loadout-desc">History channel script in final review. High-value target with massive view potential.</div>
+          <div class="loadout-stats">
+            <div class="loadout-stat">💰 <span>$2,400</span></div>
+            <div class="loadout-stat">👁 <span>500K</span></div>
+            <div class="loadout-stat">⏱ <span>2h left</span></div>
+          </div>
+          <div class="loadout-progress">
+            <div class="loadout-progress-fill" style="width: 85%;"></div>
+          </div>
+        </div>
+        
+        <div class="loadout-card">
+          <div class="loadout-header">
+            <div class="loadout-type">Upload // Queued</div>
+            <div class="loadout-priority priority-high">HIGH</div>
+          </div>
+          <div class="loadout-name">MRBEAST VS LOGAN PAUL</div>
+          <div class="loadout-desc">Drama content ready for deployment. Thumbnail variants in testing phase.</div>
+          <div class="loadout-stats">
+            <div class="loadout-stat">💰 <span>$1,800</span></div>
+            <div class="loadout-stat">👁 <span>1.2M</span></div>
+            <div class="loadout-stat">⏱ <span>4h left</span></div>
+          </div>
+          <div class="loadout-progress">
+            <div class="loadout-progress-fill" style="width: 100%;"></div>
+          </div>
+        </div>
+        
+        <div class="loadout-card">
+          <div class="loadout-header">
+            <div class="loadout-type">Research // Active</div>
+            <div class="loadout-priority priority-normal">NORMAL</div>
+          </div>
+          <div class="loadout-name">AI REVOLUTION 2025</div>
+          <div class="loadout-desc">Barvis on recon. Gathering intel on latest AI developments for tech channel.</div>
+          <div class="loadout-stats">
+            <div class="loadout-stat">💰 <span>$1,200</span></div>
+            <div class="loadout-stat">👁 <span>300K</span></div>
+            <div class="loadout-stat">⏱ <span>12h left</span></div>
+          </div>
+          <div class="loadout-progress">
+            <div class="loadout-progress-fill" style="width: 45%;"></div>
+          </div>
+        </div>
+        
+        <div class="loadout-card">
+          <div class="loadout-header">
+            <div class="loadout-type">Thumbnail // Batch</div>
+            <div class="loadout-priority priority-normal">NORMAL</div>
+          </div>
+          <div class="loadout-name">ROOF REPORT BATCH</div>
+          <div class="loadout-desc">10 thumbnails needed for next week's deployment schedule.</div>
+          <div class="loadout-stats">
+            <div class="loadout-stat">💰 <span>$800</span></div>
+            <div class="loadout-stat">👁 <span>150K</span></div>
+            <div class="loadout-stat">⏱ <span>3d left</span></div>
+          </div>
+          <div class="loadout-progress">
+            <div class="loadout-progress-fill" style="width: 20%;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Intel Panel -->
+    <aside class="intel-panel">
+      <h2 class="panel-header">// INTEL REPORT</h2>
+      
+      <div class="intel-card">
+        <div class="intel-title">EMPIRE STATS</div>
+        <div class="intel-row">
+          <span class="intel-label">Views (7D)</span>
+          <span class="intel-value">127.4K</span>
+        </div>
+        <div class="intel-row">
+          <span class="intel-label">Growth</span>
+          <span class="intel-value positive">+12.3%</span>
+        </div>
+        <div class="intel-row">
+          <span class="intel-label">Revenue</span>
+          <span class="intel-value">$2,847</span>
+        </div>
+        <div class="intel-row">
+          <span class="intel-label">Watch Time</span>
+          <span class="intel-value">4.2K hrs</span>
+        </div>
+      </div>
+      
+      <div class="intel-card">
+        <div class="intel-title">LIVE FEED</div>
+        <div class="live-feed">
+          <div class="feed-item">
+            <span class="feed-time">18:45</span>
+            <span class="feed-text"><strong>Jarvis</strong> completed script draft</span>
+          </div>
+          <div class="feed-item">
+            <span class="feed-time">18:32</span>
+            <span class="feed-text"><strong>System</strong> thumbnail approved</span>
+          </div>
+          <div class="feed-item">
+            <span class="feed-time">18:15</span>
+            <span class="feed-text"><strong>Barvis</strong> started research task</span>
+          </div>
+          <div class="feed-item">
+            <span class="feed-time">17:58</span>
+            <span class="feed-text"><strong>Carlos</strong> approved upload</span>
+          </div>
+        </div>
+      </div>
+      
+      <button class="deploy-btn">🚀 DEPLOY MISSION</button>
+    </aside>
+  </main>
+  
+  <footer class="footer-hud">
+    <div class="hud-left">
+      <div class="hud-item">
+        <span class="hud-key">E</span>
+        <span class="hud-label">Select</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-key">Q</span>
+        <span class="hud-label">Quick Chat</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-key">TAB</span>
+        <span class="hud-label">Scoreboard</span>
+      </div>
+    </div>
+    <div class="hud-right">
+      COMMAND CENTER <span>v6.0</span> // CONTINENTAL MEDIA NETWORK
+    </div>
+  </footer>
+</body>
+</html>

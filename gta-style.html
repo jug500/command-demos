@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COMMAND CENTER - GTA Style</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Roboto Condensed', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      color: white;
+      overflow-x: hidden;
+    }
+    
+    .gta-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        linear-gradient(45deg, rgba(255,107,107,0.1) 0%, transparent 50%),
+        linear-gradient(-45deg, rgba(78,205,196,0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      z-index: -1;
+    }
+    
+    .corner-decoration {
+      position: fixed;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 200px;
+      opacity: 0.03;
+      color: white;
+      z-index: 0;
+    }
+    .corner-decoration.top-right { top: -40px; right: 20px; }
+    .corner-decoration.bottom-left { bottom: -40px; left: 20px; }
+    
+    .header {
+      padding: 30px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid rgba(255,255,255,0.1);
+    }
+    
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      letter-spacing: 4px;
+      background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(255,107,107,0.5);
+    }
+    
+    .player-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .player-level {
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      padding: 8px 20px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+    }
+    
+    .player-cash {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      color: #2ecc71;
+    }
+    
+    .main-content {
+      display: grid;
+      grid-template-columns: 350px 1fr 300px;
+      gap: 30px;
+      padding: 40px 50px;
+      min-height: calc(100vh - 120px);
+    }
+    
+    /* Character Select Panel */
+    .character-panel {
+      background: rgba(0,0,0,0.4);
+      border: 2px solid rgba(255,255,255,0.1);
+      padding: 25px;
+    }
+    
+    .panel-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+      color: #48dbfb;
+      border-bottom: 2px solid #48dbfb;
+      padding-bottom: 10px;
+    }
+    
+    .character-card {
+      background: rgba(255,255,255,0.05);
+      border: 2px solid transparent;
+      padding: 15px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .character-card:hover {
+      background: rgba(255,107,107,0.1);
+      border-color: #ff6b6b;
+      transform: translateX(10px);
+    }
+    
+    .character-card.active {
+      background: rgba(78,205,196,0.2);
+      border-color: #4ecdc4;
+    }
+    
+    .character-avatar {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%);
+    }
+    
+    .character-info h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 2px;
+    }
+    
+    .character-info p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .character-status {
+      margin-left: auto;
+      padding: 4px 12px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+    
+    .status-online { background: #2ecc71; color: black; }
+    .status-busy { background: #f39c12; color: black; }
+    .status-offline { background: #95a5a6; color: black; }
+    
+    /* Main Mission Board */
+    .mission-board {
+      background: rgba(0,0,0,0.4);
+      border: 2px solid rgba(255,255,255,0.1);
+      padding: 25px;
+    }
+    
+    .mission-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+    
+    .mission-tabs {
+      display: flex;
+      gap: 5px;
+    }
+    
+    .mission-tab {
+      padding: 10px 25px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 2px;
+      background: rgba(255,255,255,0.05);
+      border: none;
+      color: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+    }
+    
+    .mission-tab:hover { background: rgba(255,255,255,0.1); color: white; }
+    .mission-tab.active { background: #ff6b6b; color: white; }
+    
+    .missions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    
+    .mission-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border: 2px solid rgba(255,255,255,0.1);
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .mission-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background: #ff6b6b;
+    }
+    
+    .mission-card:hover {
+      transform: translateY(-5px);
+      border-color: #ff6b6b;
+      box-shadow: 0 10px 40px rgba(255,107,107,0.2);
+    }
+    
+    .mission-card.priority-high::before { background: #ff6b6b; }
+    .mission-card.priority-medium::before { background: #f39c12; }
+    .mission-card.priority-low::before { background: #2ecc71; }
+    
+    .mission-type {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 8px;
+    }
+    
+    .mission-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    
+    .mission-desc {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
+    
+    .mission-reward {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .reward-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 14px;
+    }
+    
+    .reward-item.cash { color: #2ecc71; }
+    .reward-item.views { color: #48dbfb; }
+    .reward-item.xp { color: #f39c12; }
+    
+    /* Radio Panel */
+    .radio-panel {
+      background: rgba(0,0,0,0.4);
+      border: 2px solid rgba(255,255,255,0.1);
+      padding: 25px;
+    }
+    
+    .radio-now-playing {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .radio-station {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      letter-spacing: 3px;
+    }
+    
+    .radio-track {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      margin-top: 5px;
+    }
+    
+    .radio-visualizer {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      height: 40px;
+      align-items: flex-end;
+      margin-top: 15px;
+    }
+    
+    .radio-bar {
+      width: 6px;
+      background: white;
+      animation: radioBar 0.5s ease infinite alternate;
+    }
+    
+    @keyframes radioBar {
+      from { height: 10px; opacity: 0.5; }
+      to { height: 40px; opacity: 1; }
+    }
+    
+    .radio-bar:nth-child(1) { animation-delay: 0s; }
+    .radio-bar:nth-child(2) { animation-delay: 0.1s; }
+    .radio-bar:nth-child(3) { animation-delay: 0.2s; }
+    .radio-bar:nth-child(4) { animation-delay: 0.3s; }
+    .radio-bar:nth-child(5) { animation-delay: 0.4s; }
+    .radio-bar:nth-child(6) { animation-delay: 0.2s; }
+    .radio-bar:nth-child(7) { animation-delay: 0.1s; }
+    
+    .stats-section {
+      margin-top: 25px;
+    }
+    
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .stat-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      color: #48dbfb;
+    }
+    
+    .quick-actions {
+      margin-top: 25px;
+    }
+    
+    .action-btn {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 10px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 2px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%);
+    }
+    
+    .action-btn.primary {
+      background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+      color: white;
+    }
+    
+    .action-btn.secondary {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+    
+    .action-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 5px 20px rgba(255,107,107,0.3);
+    }
+    
+    /* Footer */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 15px 50px;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 2px solid rgba(255,255,255,0.1);
+    }
+    
+    .footer-hint {
+      display: flex;
+      gap: 30px;
+    }
+    
+    .hint-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+    }
+    
+    .hint-key {
+      background: rgba(255,255,255,0.1);
+      padding: 4px 10px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 14px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .footer-version {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="gta-bg"></div>
+  <div class="corner-decoration top-right">V</div>
+  <div class="corner-decoration bottom-left">VI</div>
+  
+  <header class="header">
+    <div class="logo">COMMAND CENTER</div>
+    <div class="player-info">
+      <div class="player-level">LVL 47</div>
+      <div class="player-cash">$847,293</div>
+    </div>
+  </header>
+  
+  <main class="main-content">
+    <!-- Character Panel -->
+    <aside class="character-panel">
+      <h2 class="panel-title">CREW</h2>
+      
+      <div class="character-card active">
+        <div class="character-avatar" style="background: linear-gradient(135deg, #f39c12, #e74c3c);">C</div>
+        <div class="character-info">
+          <h3>CARLOS</h3>
+          <p>The Boss</p>
+        </div>
+        <span class="character-status status-online">Online</span>
+      </div>
+      
+      <div class="character-card">
+        <div class="character-avatar" style="background: linear-gradient(135deg, #9b59b6, #3498db);">J</div>
+        <div class="character-info">
+          <h3>JUG</h3>
+          <p>The Partner</p>
+        </div>
+        <span class="character-status status-online">Online</span>
+      </div>
+      
+      <div class="character-card">
+        <div class="character-avatar" style="background: linear-gradient(135deg, #2ecc71, #1abc9c);">J</div>
+        <div class="character-info">
+          <h3>JARVIS</h3>
+          <p>AI Operative</p>
+        </div>
+        <span class="character-status status-busy">Cooking</span>
+      </div>
+      
+      <div class="character-card">
+        <div class="character-avatar" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">B</div>
+        <div class="character-info">
+          <h3>BARVIS</h3>
+          <p>AI Operative</p>
+        </div>
+        <span class="character-status status-busy">Locked In</span>
+      </div>
+    </aside>
+    
+    <!-- Mission Board -->
+    <section class="mission-board">
+      <div class="mission-header">
+        <h2 class="panel-title">ACTIVE MISSIONS</h2>
+        <div class="mission-tabs">
+          <button class="mission-tab active">ALL</button>
+          <button class="mission-tab">URGENT</button>
+          <button class="mission-tab">SCRIPTS</button>
+          <button class="mission-tab">UPLOADS</button>
+        </div>
+      </div>
+      
+      <div class="missions-grid">
+        <div class="mission-card priority-high">
+          <div class="mission-type">SCRIPT // URGENT</div>
+          <div class="mission-name">THE LOST CITY OF GOLD</div>
+          <div class="mission-desc">History channel script needs final review. Jarvis has the draft ready.</div>
+          <div class="mission-reward">
+            <span class="reward-item cash">💵 $2,400</span>
+            <span class="reward-item views">👁 500K views</span>
+            <span class="reward-item xp">⭐ 150 XP</span>
+          </div>
+        </div>
+        
+        <div class="mission-card priority-high">
+          <div class="mission-type">UPLOAD // SCHEDULED</div>
+          <div class="mission-name">MRBEAST VS LOGAN PAUL</div>
+          <div class="mission-desc">Drama video ready for upload. Thumbnail A/B test pending.</div>
+          <div class="mission-reward">
+            <span class="reward-item cash">💵 $1,800</span>
+            <span class="reward-item views">👁 1.2M views</span>
+            <span class="reward-item xp">⭐ 200 XP</span>
+          </div>
+        </div>
+        
+        <div class="mission-card priority-medium">
+          <div class="mission-type">RESEARCH // IN PROGRESS</div>
+          <div class="mission-name">AI REVOLUTION 2025</div>
+          <div class="mission-desc">Barvis researching latest AI developments for tech channel.</div>
+          <div class="mission-reward">
+            <span class="reward-item cash">💵 $1,200</span>
+            <span class="reward-item views">👁 300K views</span>
+            <span class="reward-item xp">⭐ 100 XP</span>
+          </div>
+        </div>
+        
+        <div class="mission-card priority-low">
+          <div class="mission-type">THUMBNAIL // QUEUED</div>
+          <div class="mission-name">ROOF REPORT BATCH</div>
+          <div class="mission-desc">10 thumbnails needed for next week's Roof Report uploads.</div>
+          <div class="mission-reward">
+            <span class="reward-item cash">💵 $800</span>
+            <span class="reward-item views">👁 150K views</span>
+            <span class="reward-item xp">⭐ 75 XP</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Radio Panel -->
+    <aside class="radio-panel">
+      <h2 class="panel-title">VIBES</h2>
+      
+      <div class="radio-now-playing">
+        <div class="radio-station">🎵 RIO DA YUNG OG</div>
+        <div class="radio-track">Now Playing: "Freestyle #47"</div>
+        <div class="radio-visualizer">
+          <div class="radio-bar"></div>
+          <div class="radio-bar"></div>
+          <div class="radio-bar"></div>
+          <div class="radio-bar"></div>
+          <div class="radio-bar"></div>
+          <div class="radio-bar"></div>
+          <div class="radio-bar"></div>
+        </div>
+      </div>
+      
+      <div class="stats-section">
+        <h3 class="panel-title" style="font-size: 20px;">EMPIRE STATS</h3>
+        
+        <div class="stat-row">
+          <span class="stat-label">Total Views (7D)</span>
+          <span class="stat-value">127,394</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Revenue (MTD)</span>
+          <span class="stat-value">$12,847</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Active Channels</span>
+          <span class="stat-value">8</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Videos Shipped</span>
+          <span class="stat-value">347</span>
+        </div>
+      </div>
+      
+      <div class="quick-actions">
+        <button class="action-btn primary">🚀 START NEW MISSION</button>
+        <button class="action-btn secondary">💬 TALK TO AI</button>
+        <button class="action-btn secondary">📊 VIEW ANALYTICS</button>
+      </div>
+    </aside>
+  </main>
+  
+  <footer class="footer">
+    <div class="footer-hint">
+      <div class="hint-item">
+        <span class="hint-key">ENTER</span>
+        <span>Select</span>
+      </div>
+      <div class="hint-item">
+        <span class="hint-key">ESC</span>
+        <span>Back</span>
+      </div>
+      <div class="hint-item">
+        <span class="hint-key">TAB</span>
+        <span>Quick Chat</span>
+      </div>
+    </div>
+    <div class="footer-version">COMMAND CENTER V6.0 // BUILT DIFFERENT</div>
+  </footer>
+</body>
+</html>
